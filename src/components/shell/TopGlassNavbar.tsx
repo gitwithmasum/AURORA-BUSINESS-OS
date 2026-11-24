@@ -31,7 +31,7 @@ import {
 
 export function TopGlassNavbar() {
   const router = useRouter();
-  const { user, profile } = useAuth();
+  const { user, profile, activeOrg } = useAuth();
   const { themeId, setThemeId, language, setLanguage } = useTheme();
   const {
     workspaces,
@@ -44,10 +44,48 @@ export function TopGlassNavbar() {
   const [now, setNow] = React.useState<string>("");
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchScope, setSearchScope] = React.useState("all");
+  const [liveResults, setLiveResults] = React.useState<
+    { type: string; id: string; title: string; subtitle: string; href: string }[]
+  >([]);
+  const [liveNotifs, setLiveNotifs] = React.useState<
+    { id: string; title: string; message: string; is_read: boolean; action_url: string | null; created_at: string }[]
+  >([]);
   const [themeMenuOpen, setThemeMenuOpen] = React.useState(false);
   const [notifOpen, setNotifOpen] = React.useState(false);
   const [quickCreateOpen, setQuickCreateOpen] = React.useState(false);
   const controlsRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!activeOrg) {
+      setLiveNotifs([]);
+      return;
+    }
+    fetch(`/api/notifications?organizationId=${activeOrg.organizationId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((json) => {
+        if (json?.notifications) setLiveNotifs(json.notifications);
+      })
+      .catch(() => {});
+  }, [activeOrg]);
+
+  React.useEffect(() => {
+    if (!searchOpen || !activeOrg || searchQuery.trim().length < 2) {
+      setLiveResults([]);
+      return;
+    }
+    const t = setTimeout(() => {
+      fetch(
+        `/api/search?organizationId=${activeOrg.organizationId}&q=${encodeURIComponent(
+          searchQuery.trim()
+        )}&scope=${searchScope}`
+      )
+        .then((r) => (r.ok ? r.json() : null))
+        .then((json) => setLiveResults(json?.results ?? []))
+        .catch(() => setLiveResults([]));
+    }, 180);
+    return () => clearTimeout(t);
+  }, [searchOpen, activeOrg, searchQuery, searchScope]);
 
   React.useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -112,12 +150,6 @@ export function TopGlassNavbar() {
 
   const handleQuickAction = (label: string, href: string) => {
     setQuickCreateOpen(false);
-    toast({
-      title: `${label} (Phase 1 Preview)`,
-      description:
-        "Full transactional forms unlock in Phase 4–5. Navigating to module shell.",
-      tone: "info",
-    });
     router.push(href);
   };
 
@@ -350,27 +382,79 @@ export function TopGlassNavbar() {
                     <span className="text-xs font-semibold text-[var(--aurora-text-strong)]">
                       Notification Center
                     </span>
-                    <GlassBadge tone="warning">Demo Alerts</GlassBadge>
-                  </div>
-                  <div className="space-y-2">
-                    {DEMO_NOTIFICATIONS.map((n) => (
-                      <div
-                        key={n.id}
-                        className="aurora-glass-subtle rounded-2xl p-2.5 text-xs"
+                    {activeOrg ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          fetch("/api/notifications", {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                              organizationId: activeOrg.organizationId,
+                              markAllRead: true,
+                            }),
+                          });
+                          setLiveNotifs((prev) =>
+                            prev.map((n) => ({ ...n, is_read: true }))
+                          );
+                        }}
+                        className="cursor-pointer text-[10px] font-medium text-[var(--aurora-accent)] hover:underline"
                       >
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="font-semibold text-[var(--aurora-text-strong)]">
-                            {n.title}
-                          </span>
-                          <span className="text-[10px] text-[var(--aurora-text-muted)]">
-                            {n.time}
-                          </span>
+                        Mark all read
+                      </button>
+                    ) : (
+                      <GlassBadge tone="warning">Demo Alerts</GlassBadge>
+                    )}
+                  </div>
+                  <div className="max-h-72 space-y-2 overflow-y-auto">
+                    {activeOrg ? (
+                      liveNotifs.length === 0 ? (
+                        <div className="p-3 text-center text-xs text-[var(--aurora-text-muted)]">
+                          No active notifications for {activeOrg.organizationName}.
                         </div>
-                        <p className="mt-1 text-[11px] text-[var(--aurora-text-muted)]">
-                          {n.detail}
-                        </p>
-                      </div>
-                    ))}
+                      ) : (
+                        liveNotifs.map((n) => (
+                          <button
+                            key={n.id}
+                            type="button"
+                            onClick={() => {
+                              setNotifOpen(false);
+                              if (n.action_url) router.push(n.action_url);
+                            }}
+                            className="aurora-glass-subtle w-full cursor-pointer rounded-2xl p-2.5 text-left text-xs transition-colors hover:bg-[var(--aurora-glass-bg)]"
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-semibold text-[var(--aurora-text-strong)]">
+                                {n.title}
+                              </span>
+                              {!n.is_read && <GlassBadge tone="info">New</GlassBadge>}
+                            </div>
+                            <p className="mt-1 text-[11px] text-[var(--aurora-text-muted)]">
+                              {n.message}
+                            </p>
+                          </button>
+                        ))
+                      )
+                    ) : (
+                      DEMO_NOTIFICATIONS.map((n) => (
+                        <div
+                          key={n.id}
+                          className="aurora-glass-subtle rounded-2xl p-2.5 text-xs"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-semibold text-[var(--aurora-text-strong)]">
+                              {n.title}
+                            </span>
+                            <span className="text-[10px] text-[var(--aurora-text-muted)]">
+                              {n.time}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-[11px] text-[var(--aurora-text-muted)]">
+                            {n.detail}
+                          </p>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               )}
@@ -399,7 +483,11 @@ export function TopGlassNavbar() {
         open={searchOpen}
         onOpenChange={setSearchOpen}
         title="Unified Global Search"
-        description="Search across modules now; live database records will index here in Phase 3–4."
+        description={
+          activeOrg
+            ? `Searching modules & live records in ${activeOrg.organizationName}`
+            : "Search across modules now; live records index once signed into an organization."
+        }
         maxWidth="md"
       >
         <div className="space-y-4">
@@ -407,8 +495,62 @@ export function TopGlassNavbar() {
             autoFocus
             value={searchQuery}
             onChange={setSearchQuery}
-            placeholder="Type module name or capability (e.g. Import, Inventory, Sales)..."
+            placeholder="Search products, customers, suppliers, invoices, POs, or modules..."
           />
+          {activeOrg && (
+            <div className="flex flex-wrap gap-1.5">
+              {[
+                { key: "all", label: "All" },
+                { key: "products", label: "Products" },
+                { key: "customers", label: "Customers" },
+                { key: "suppliers", label: "Suppliers" },
+                { key: "orders", label: "Orders" },
+                { key: "invoices", label: "Invoices" },
+                { key: "purchase_orders", label: "POs" },
+                { key: "transactions", label: "Transactions" },
+              ].map((s) => (
+                <GlassButton
+                  key={s.key}
+                  size="sm"
+                  variant={searchScope === s.key ? "primary" : "ghost"}
+                  className="h-7 rounded-full px-2.5 text-[11px]"
+                  onClick={() => setSearchScope(s.key)}
+                >
+                  {s.label}
+                </GlassButton>
+              ))}
+            </div>
+          )}
+
+          {liveResults.length > 0 && (
+            <div className="space-y-1.5">
+              <div className="text-[10px] font-semibold uppercase tracking-wider text-[var(--aurora-text-muted)]">
+                Database Records ({liveResults.length})
+              </div>
+              {liveResults.map((res) => (
+                <button
+                  key={`${res.type}-${res.id}`}
+                  type="button"
+                  onClick={() => {
+                    setSearchOpen(false);
+                    router.push(res.href);
+                  }}
+                  className="aurora-glass-subtle flex w-full cursor-pointer items-center justify-between gap-3 rounded-2xl px-3.5 py-2 text-left transition-colors hover:bg-[var(--aurora-glass-bg)]"
+                >
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold text-[var(--aurora-text-strong)]">
+                      {res.title}
+                    </div>
+                    <div className="truncate text-[11px] text-[var(--aurora-text-muted)]">
+                      {res.subtitle}
+                    </div>
+                  </div>
+                  <GlassBadge tone="accent">{res.type}</GlassBadge>
+                </button>
+              ))}
+            </div>
+          )}
+
           <div className="space-y-1.5">
             {filteredNav.map((item) => (
               <button

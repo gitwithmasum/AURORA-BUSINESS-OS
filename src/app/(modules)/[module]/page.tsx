@@ -10,6 +10,7 @@ import { useTheme } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils/cn";
 import { DynamicCategoryManager } from "@/components/settings/DynamicCategoryManager";
 import { OrganizationSettingsPanel } from "@/components/settings/OrganizationSettingsPanel";
+import { BackupAndAuditPanel } from "@/components/settings/BackupAndAuditPanel";
 import {
   GlassBadge,
   GlassButton,
@@ -99,63 +100,67 @@ export default function ModuleRoadmapPage() {
       {isCategories && <DynamicCategoryManager />}
 
       {isSettings && (
-        <div className="grid gap-5 lg:grid-cols-2">
-          <GlassCard>
-            <GlassCardHeader>
-              <div>
-                <GlassCardTitle>Theme System Configuration</GlassCardTitle>
-                <GlassCardDescription>
-                  Switch between Midnight Blue, Emerald Aurora, and Light Glass using centralized tokens
-                </GlassCardDescription>
-              </div>
-            </GlassCardHeader>
-            <GlassCardContent className="space-y-2.5">
-              {THEME_LIST.map((t) => {
-                const active = t.id === themeId;
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => {
-                      setThemeId(t.id);
-                      toast({
-                        title: `Applied ${t.name} theme`,
-                        tone: "success",
-                      });
-                    }}
-                    className={cn(
-                      "aurora-glass-subtle flex w-full cursor-pointer items-center justify-between rounded-[18px] p-3.5 text-left transition-all",
-                      active &&
-                        "aurora-active-glow border-[var(--aurora-glass-border-strong)]"
-                    )}
-                  >
-                    <div>
-                      <div className="text-sm font-semibold text-[var(--aurora-text-strong)]">
-                        {t.name}
-                      </div>
-                      <div className="text-xs text-[var(--aurora-text-muted)]">
-                        {t.subtitle} · BG {t.colors.background}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      {t.swatches.map((hex) => (
-                        <span
-                          key={hex}
-                          className="h-4 w-4 rounded-full border border-white/25"
-                          style={{ backgroundColor: hex }}
-                        />
-                      ))}
-                      {active && (
-                        <Check className="ml-1 h-4 w-4 text-[var(--aurora-accent)]" />
+        <div className="space-y-5">
+          <div className="grid gap-5 lg:grid-cols-2">
+            <GlassCard>
+              <GlassCardHeader>
+                <div>
+                  <GlassCardTitle>Theme System Configuration</GlassCardTitle>
+                  <GlassCardDescription>
+                    Switch between Midnight Blue, Emerald Aurora, and Light Glass using centralized tokens
+                  </GlassCardDescription>
+                </div>
+              </GlassCardHeader>
+              <GlassCardContent className="space-y-2.5">
+                {THEME_LIST.map((t) => {
+                  const active = t.id === themeId;
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => {
+                        setThemeId(t.id);
+                        toast({
+                          title: `Applied ${t.name} theme`,
+                          tone: "success",
+                        });
+                      }}
+                      className={cn(
+                        "aurora-glass-subtle flex w-full cursor-pointer items-center justify-between rounded-[18px] p-3.5 text-left transition-all",
+                        active &&
+                          "aurora-active-glow border-[var(--aurora-glass-border-strong)]"
                       )}
-                    </div>
-                  </button>
-                );
-              })}
-            </GlassCardContent>
-          </GlassCard>
+                    >
+                      <div>
+                        <div className="text-sm font-semibold text-[var(--aurora-text-strong)]">
+                          {t.name}
+                        </div>
+                        <div className="text-xs text-[var(--aurora-text-muted)]">
+                          {t.subtitle} · BG {t.colors.background}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        {t.swatches.map((hex) => (
+                          <span
+                            key={hex}
+                            className="h-4 w-4 rounded-full border border-white/25"
+                            style={{ backgroundColor: hex }}
+                          />
+                        ))}
+                        {active && (
+                          <Check className="ml-1 h-4 w-4 text-[var(--aurora-accent)]" />
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </GlassCardContent>
+            </GlassCard>
 
-          <OrganizationSettingsPanel />
+            <OrganizationSettingsPanel />
+          </div>
+
+          <BackupAndAuditPanel />
         </div>
       )}
     </div>

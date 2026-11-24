@@ -12,7 +12,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "ওভারভিউ",
         href: "/",
         iconName: "LayoutDashboard",
-        phase: "Phase 1 (Active)",
+        phase: "Active (Demo)",
         description:
           "Modular executive KPIs, revenue & profit trends, stock alerts, and recent demo transactions.",
       },
@@ -22,9 +22,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "অ্যানালিটিক্স",
         href: "/analytics",
         iconName: "LineChart",
-        phase: "Phase 6",
+        phase: "Active",
         description:
-          "Sales Analytics, Monthly Business Dashboard, and Best-Selling Perfume Intelligence.",
+          "Advanced Analytics, Monthly Business Dashboard, Stock Alerts & Best-Selling Perfume Intelligence.",
       },
     ],
   },
@@ -39,8 +39,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "ইনভেন্টরি",
         href: "/inventory",
         iconName: "Boxes",
-        badge: "4",
-        phase: "Phase 4",
+        phase: "Active",
         description:
           "Multi-warehouse stock ledger, batch tracking, movements, and non-negative inventory guard.",
       },
@@ -50,7 +49,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "পণ্য তালিকা",
         href: "/products",
         iconName: "Sparkles",
-        phase: "Phase 4",
+        phase: "Active",
         description:
           "Universal product catalog powered by the Dynamic Category & Perfume Attribute Engine.",
       },
@@ -60,7 +59,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "ক্যাটাগরি ও ব্র্যান্ড",
         href: "/categories-brands",
         iconName: "Tags",
-        phase: "Phase 4",
+        phase: "Active",
         description:
           "Configure business categories, custom attributes, fragrance families, and brand registry.",
       },
@@ -77,7 +76,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "বিক্রয়",
         href: "/sales",
         iconName: "BadgeDollarSign",
-        phase: "Phase 4",
+        phase: "Active",
         description:
           "Daily Sales Register, multi-item invoicing, returns, and real-time channel performance.",
       },
@@ -87,10 +86,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "অর্ডার",
         href: "/orders",
         iconName: "ShoppingBag",
-        badge: "7",
-        phase: "Phase 4",
+        phase: "Active",
         description:
-          "Omnichannel order lifecycle, fulfillment status, invoices, and credit notes.",
+          "Omnichannel order lifecycle and branded Sales, Purchase, Proforma & Credit Note Invoice Generator.",
       },
       {
         id: "customers",
@@ -98,9 +96,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "কাস্টমার",
         href: "/customers",
         iconName: "Users",
-        phase: "Phase 4",
+        phase: "Active",
         description:
-          "Customer CRM profiles, VIP/Wholesale segmentation, CLV, loyalty points, and follow-ups.",
+          "Customer CRM profiles, VIP/Wholesale segmentation, CLV, and follow-up reminders.",
       },
     ],
   },
@@ -115,7 +113,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "সাপ্লায়ার",
         href: "/suppliers",
         iconName: "Building2",
-        phase: "Phase 4",
+        phase: "Active",
         description:
           "Scalable 100+ supplier directory, brand mapping, verification checklist, and price history.",
       },
@@ -125,7 +123,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "ক্রয় ও PO",
         href: "/purchases",
         iconName: "ClipboardCheck",
-        phase: "Phase 4",
+        phase: "Active",
         description:
           "Purchase Order approval workflow, partial/full receiving, and landed cost allocation.",
       },
@@ -135,7 +133,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "ইমপোর্ট কস্ট",
         href: "/import-management",
         iconName: "PlaneLanding",
-        phase: "Phase 5",
+        phase: "Active",
         description:
           "Saudi Arabia → Bangladesh landed cost calculator & configurable Bangladesh Customs/VAT estimator.",
       },
@@ -145,7 +143,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "শিপিং ও লজিস্টিকস",
         href: "/shipping-logistics",
         iconName: "Ship",
-        phase: "Phase 5",
+        phase: "Active",
         description:
           "Air, Sea & Courier freight calculator with volumetric weight and Dangerous Goods review flags.",
       },
@@ -162,7 +160,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "ফাইন্যান্স",
         href: "/finance",
         iconName: "Landmark",
-        phase: "Phase 5",
+        phase: "Active",
         description:
           "Profit & Loss Statement, Cash Flow across Cash/Bank/MFS, and Break-even Simulator.",
       },
@@ -172,9 +170,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "খরচ",
         href: "/expenses",
         iconName: "Receipt",
-        phase: "Phase 5",
+        phase: "Active",
         description:
-          "Operating, marketing, freight, customs, and administrative expense ledger.",
+          "Operating, marketing, freight, customs, and administrative expense ledger with approvals.",
       },
       {
         id: "marketing-ads",
@@ -182,7 +180,7 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "মার্কেটিং ও বিজ্ঞাপন",
         href: "/marketing-ads",
         iconName: "Megaphone",
-        phase: "Phase 6",
+        phase: "Active",
         description:
           "Facebook Ads ROI Tracker measuring CTR, CPC, CAC, ROAS, and post-ad contribution.",
       },
@@ -192,9 +190,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "রিপোর্ট",
         href: "/reports",
         iconName: "FileSpreadsheet",
-        phase: "Phase 6",
+        phase: "Active",
         description:
-          "11 enterprise financial, tax, inventory, and supplier reports with PDF/CSV/Excel exports.",
+          "12 enterprise financial, tax, inventory, and supplier reports with PDF/CSV/Excel exports.",
       },
     ],
   },
@@ -209,9 +207,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "এআই অ্যাসিস্ট্যান্ট",
         href: "/ai-assistant",
         iconName: "Bot",
-        phase: "Phase 6",
+        phase: "Active",
         description:
-          "Data-grounded business intelligence separating actual records, forecasts, and recommendations.",
+          "Data-grounded business intelligence separating actual records, forecasts, and human-approved proposals.",
       },
       {
         id: "settings",
@@ -219,9 +217,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "সেটিংস",
         href: "/settings",
         iconName: "Settings",
-        phase: "Phase 1 & 3",
+        phase: "Active",
         description:
-          "Theme system, business setup, RBAC roles, tax assumptions, and backup & restore.",
+          "Theme system, organization setup, RBAC roles, audit logs, and backup & restore.",
       },
     ],
   },

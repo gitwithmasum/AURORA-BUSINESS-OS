@@ -30,3 +30,21 @@ export function getSupabaseServiceRoleKey(): string {
   }
   return key;
 }
+
+export function getAiProviderStatus(): {
+  configured: boolean;
+  provider: "gemini" | "openai" | null;
+} {
+  if (typeof window !== "undefined") {
+    return { configured: false, provider: null };
+  }
+  const gemini = process.env.GEMINI_API_KEY?.trim() ?? "";
+  if (gemini.length > 10) {
+    return { configured: true, provider: "gemini" };
+  }
+  const openai = process.env.OPENAI_API_KEY?.trim() ?? "";
+  if (openai.length > 10) {
+    return { configured: true, provider: "openai" };
+  }
+  return { configured: false, provider: null };
+}
