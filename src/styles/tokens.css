@@ -1,0 +1,145 @@
+/* ==========================================================================
+   AURORA BUSINESS OS — Centralized Glassmorphism Design Tokens
+   ========================================================================== */
+
+:root,
+[data-theme="midnight-blue"] {
+  color-scheme: dark;
+
+  /* Core Palette — Midnight Blue */
+  --aurora-bg: #06141b;
+  --aurora-surface: #11212d;
+  --aurora-surface-2: #253745;
+  --aurora-muted: #4a5c6a;
+  --aurora-accent-light: #9ba8ab;
+  --aurora-text: #ccd0cf;
+  --aurora-text-strong: #f0f4f6;
+  --aurora-text-muted: #9ba8ab;
+
+  /* Interactive & Brand Accents */
+  --aurora-accent: #5fa8d3;
+  --aurora-accent-contrast: #06141b;
+  --aurora-glow: rgba(95, 168, 211, 0.24);
+  --aurora-ambient-1: rgba(37, 55, 69, 0.55);
+  --aurora-ambient-2: rgba(74, 92, 106, 0.28);
+
+  /* Glassmorphism Surfaces */
+  --aurora-glass-bg: rgba(17, 33, 45, 0.62);
+  --aurora-glass-bg-elevated: rgba(37, 55, 69, 0.72);
+  --aurora-glass-bg-subtle: rgba(17, 33, 45, 0.38);
+  --aurora-glass-border: rgba(155, 168, 171, 0.16);
+  --aurora-glass-border-strong: rgba(204, 208, 207, 0.28);
+  --aurora-glass-highlight: rgba(255, 255, 255, 0.12);
+  --aurora-glass-shadow: 0 20px 50px -18px rgba(2, 8, 12, 0.75);
+  --aurora-blur: 20px;
+
+  /* Semantic Status Colors */
+  --aurora-success: #4ade80;
+  --aurora-warning: #fbbf24;
+  --aurora-danger: #f87171;
+  --aurora-info: #60a5fa;
+
+  /* Chart Series */
+  --aurora-chart-1: #7dd3fc;
+  --aurora-chart-2: #8eb69b;
+  --aurora-chart-3: #f7cbca;
+  --aurora-chart-4: #a78bfa;
+  --aurora-chart-5: #fbbf24;
+  --aurora-chart-grid: rgba(155, 168, 171, 0.12);
+
+  /* Radii */
+  --aurora-radius-card: 22px;
+  --aurora-radius-panel: 26px;
+  --aurora-radius-control: 16px;
+  --aurora-radius-capsule: 9999px;
+}
+
+[data-theme="emerald-aurora"] {
+  color-scheme: dark;
+
+  /* Core Palette — Emerald Aurora */
+  --aurora-bg: #051f20;
+  --aurora-surface: #0b2b26;
+  --aurora-surface-2: #163832;
+  --aurora-muted: #235347;
+  --aurora-accent-light: #8eb69b;
+  --aurora-text: #daf1de;
+  --aurora-text-strong: #f2fbf4;
+  --aurora-text-muted: #8eb69b;
+
+  /* Interactive & Brand Accents */
+  --aurora-accent: #8eb69b;
+  --aurora-accent-contrast: #051f20;
+  --aurora-glow: rgba(142, 182, 155, 0.26);
+  --aurora-ambient-1: rgba(35, 83, 71, 0.5);
+  --aurora-ambient-2: rgba(142, 182, 155, 0.16);
+
+  /* Glassmorphism Surfaces */
+  --aurora-glass-bg: rgba(11, 43, 38, 0.64);
+  --aurora-glass-bg-elevated: rgba(22, 56, 50, 0.74);
+  --aurora-glass-bg-subtle: rgba(11, 43, 38, 0.4);
+  --aurora-glass-border: rgba(142, 182, 155, 0.2);
+  --aurora-glass-border-strong: rgba(218, 241, 222, 0.3);
+  --aurora-glass-highlight: rgba(218, 241, 222, 0.13);
+  --aurora-glass-shadow: 0 20px 50px -18px rgba(2, 12, 10, 0.78);
+  --aurora-blur: 20px;
+
+  /* Semantic Status Colors */
+  --aurora-success: #6ee7b7;
+  --aurora-warning: #fcd34d;
+  --aurora-danger: #fca5a5;
+  --aurora-info: #93c5fd;
+
+  /* Chart Series */
+  --aurora-chart-1: #8eb69b;
+  --aurora-chart-2: #daf1de;
+  --aurora-chart-3: #5eead4;
+  --aurora-chart-4: #fcd34d;
+  --aurora-chart-5: #f7cbca;
+  --aurora-chart-grid: rgba(142, 182, 155, 0.14);
+}
+
+[data-theme="light-glass"] {
+  color-scheme: light;
+
+  /* Core Palette — Light Glass */
+  --aurora-bg: #f1f7f7;
+  --aurora-surface: #d5e5e5;
+  --aurora-surface-2: #ddd3d3;
+  --aurora-muted: #bdd7d8;
+  --aurora-accent-light: #f7cbca;
+  --aurora-text: #394646;
+  --aurora-text-strong: #1e2828;
+  --aurora-text-muted: #5d6b6b;
+
+  /* Interactive & Brand Accents */
+  --aurora-accent: #5d6b6b;
+  --aurora-accent-contrast: #f1f7f7;
+  --aurora-glow: rgba(247, 203, 202, 0.55);
+  --aurora-ambient-1: rgba(189, 215, 216, 0.65);
+  --aurora-ambient-2: rgba(247, 203, 202, 0.45);
+
+  /* Glassmorphism Surfaces */
+  --aurora-glass-bg: rgba(255, 255, 255, 0.62);
+  --aurora-glass-bg-elevated: rgba(213, 229, 229, 0.78);
+  --aurora-glass-bg-subtle: rgba(241, 247, 247, 0.52);
+  --aurora-glass-border: rgba(93, 107, 107, 0.16);
+  --aurora-glass-border-strong: rgba(93, 107, 107, 0.28);
+  --aurora-glass-highlight: rgba(255, 255, 255, 0.75);
+  --aurora-glass-shadow: 0 20px 45px -20px rgba(93, 107, 107, 0.28);
+  --aurora-blur: 22px;
+
+  /* Semantic Status Colors */
+  --aurora-success: #0f9d58;
+  --aurora-warning: #c27803;
+  --aurora-danger: #c83e3b;
+  --aurora-info: #2563eb;
+
+  /* Chart Series */
+  --aurora-chart-1: #3b6e70;
+  --aurora-chart-2: #c97b79;
+  --aurora-chart-3: #5d6b6b;
+  --aurora-chart-4: #4f7cac;
+  --aurora-chart-5: #b6894b;
+  --aurora-chart-grid: rgba(93, 107, 107, 0.14);
+}
