@@ -80,7 +80,7 @@ function ReportsCenterWorkspace() {
     if (rows.length === 0) return;
     exportDocumentPdf({
       title: (activeMeta?.label ?? "REPORT").toUpperCase(),
-      businessName: activeOrg?.organizationName ?? "AURORA OS",
+      businessName: activeOrg?.organizationName ?? "AURORA BUSINESS OS",
       meta: [
         { label: "Date Range", value: `${startDate || "All"} to ${endDate || "Today"}` },
         { label: "Total Rows", value: String(rows.length) },

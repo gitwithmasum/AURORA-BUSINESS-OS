@@ -391,7 +391,7 @@ function SalesWorkspace() {
               onClick={() =>
                 exportDocumentPdf({
                   title: "DAILY SALES REGISTER",
-                  businessName: activeOrg?.organizationName ?? "AURORA OS",
+                  businessName: activeOrg?.organizationName ?? "AURORA BUSINESS OS",
                   meta: [
                     {
                       label: "Period",

@@ -4,7 +4,6 @@
 
 # AURORA BUSINESS OS
 
-### *One Intelligent Workspace. Complete Business Control.*
 **Your Business. Our Technology. Infinite Possibilities.**
 
 [![Live Demo](https://img.shields.io/badge/LIVE%20APP-aurora--business--os.vercel.app-00E5FF?style=for-the-badge&logo=vercel&logoColor=white)](https://aurora-business-os.vercel.app/)

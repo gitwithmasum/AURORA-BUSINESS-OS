@@ -153,7 +153,7 @@ function OrdersInvoicesWorkspace() {
     exportDocumentPdf({
       title: `${inv.invoice_type.toUpperCase()} INVOICE`,
       subtitle: inv.invoice_number,
-      businessName: biz?.business_name || activeOrg?.organizationName || "AURORA OS",
+      businessName: biz?.business_name || activeOrg?.organizationName || "AURORA BUSINESS OS",
       businessAddress: [biz?.address_line, biz?.city].filter(Boolean).join(", "),
       businessContact: [biz?.contact_phone, biz?.contact_email].filter(Boolean).join(" · "),
       meta: [

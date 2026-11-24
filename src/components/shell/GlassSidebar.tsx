@@ -36,6 +36,7 @@ import { useWorkspace } from "@/context/WorkspaceContext";
 import { ROLE_LABELS } from "@/lib/auth/rbac";
 import { cn } from "@/lib/utils/cn";
 import { GlassBadge } from "@/components/ui";
+import { AuroraBrandTitle, AuroraLogoMark } from "@/components/brand/AuroraLogo";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard,
@@ -112,19 +113,8 @@ function SidebarContent({
             collapsed && "justify-center"
           )}
         >
-          <div className="aurora-active-glow flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[var(--aurora-accent)] text-[var(--aurora-accent-contrast)] font-bold tracking-tight">
-            A
-          </div>
-          {!collapsed && (
-            <div className="min-w-0">
-              <div className="truncate text-sm font-bold tracking-wide text-[var(--aurora-text-strong)]">
-                AURORA OS
-              </div>
-              <div className="truncate text-[10px] font-medium uppercase tracking-widest text-[var(--aurora-text-muted)]">
-                Universal ERP
-              </div>
-            </div>
-          )}
+          <AuroraLogoMark />
+          {!collapsed && <AuroraBrandTitle compact />}
         </Link>
 
         <button

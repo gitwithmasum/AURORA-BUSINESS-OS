@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, ArrowRight, Lock, Mail, Sparkles } from "lucide-react";
+import { AlertCircle, ArrowRight, Lock, Mail } from "lucide-react";
 import { z } from "zod";
 import { loginSchema } from "@/lib/validators/part2";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { isSupabaseConfigured } from "@/lib/env";
+import { AuroraLogoMark } from "@/components/brand/AuroraLogo";
 import {
   FormField,
   GlassBadge,
@@ -83,15 +84,15 @@ export default function LoginPage() {
     <div className="mx-auto flex min-h-[75vh] max-w-md items-center justify-center py-6">
       <GlassCard variant="elevated" className="w-full">
         <GlassCardHeader>
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[var(--aurora-accent)]" />
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <AuroraLogoMark className="h-9 w-9" />
               <GlassBadge tone={configured ? "success" : "warning"}>
                 {configured ? "Supabase Auth Connected" : "Supabase Not Configured"}
               </GlassBadge>
             </div>
             <GlassCardTitle className="text-xl">
-              Sign in to AURORA OS
+              Sign in to AURORA BUSINESS OS
             </GlassCardTitle>
             <GlassCardDescription>
               Access your multi-tenant workspace with organization-isolated RBAC.

@@ -273,7 +273,7 @@ function PurchasesWorkspace() {
     exportDocumentPdf({
       title: "PURCHASE ORDER",
       subtitle: po.po_number,
-      businessName: activeOrg?.organizationName ?? "AURORA OS",
+      businessName: activeOrg?.organizationName ?? "AURORA BUSINESS OS",
       meta: [
         { label: "Supplier", value: sup },
         { label: "Purchase Date", value: po.purchase_date },

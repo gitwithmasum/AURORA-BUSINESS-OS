@@ -7,9 +7,9 @@ import { ToastProvider } from "@/components/ui";
 import { AppShell } from "@/components/shell/AppShell";
 
 export const metadata: Metadata = {
-  title: "AURORA BUSINESS OS — Universal Intelligent ERP",
+  title: "AURORA BUSINESS OS",
   description:
-    "Futuristic Glassmorphism Universal Business Management & Luxury Perfume Import ERP Platform.",
+    "Futuristic Glassmorphism Business Management & Luxury Perfume Import ERP Platform.",
 };
 
 export default function RootLayout({
