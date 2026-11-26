@@ -95,7 +95,7 @@ export function WorkspaceSwitcher({
       return (
         <Link
           href="/onboarding"
-          className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 text-[13px] font-semibold text-[var(--aurora-text-strong)] transition-colors hover:border-[var(--aurora-glass-border-strong)] xl:flex"
+          className="aurora-capsule flex h-9 shrink-0 items-center gap-1.5 px-3 text-[13px] font-semibold text-[var(--aurora-text-strong)] transition-colors hover:border-[var(--aurora-glass-border-strong)]"
         >
           <PlusCircle className="h-3.5 w-3.5 text-[var(--aurora-accent)]" />
           <span>Setup Business</span>
@@ -104,13 +104,13 @@ export function WorkspaceSwitcher({
     }
 
     return (
-      <div className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 xl:flex">
-        <Sparkles className="h-3.5 w-3.5 text-[var(--aurora-accent)]" />
+      <div className="aurora-capsule flex h-9 shrink-0 items-center gap-1.5 px-2.5 sm:px-3">
+        <Sparkles className="h-3.5 w-3.5 shrink-0 text-[var(--aurora-accent)]" />
         <select
           aria-label="Active workspace"
           value={activeId}
           onChange={(e) => handleSelectChange(e.target.value)}
-          className="cursor-pointer bg-transparent text-[13px] font-semibold text-[var(--aurora-text-strong)] focus:outline-none"
+          className="max-w-[130px] cursor-pointer truncate bg-transparent text-xs font-semibold text-[var(--aurora-text-strong)] focus:outline-none sm:max-w-none sm:text-[13px]"
         >
           {options.map((opt) => (
             <option

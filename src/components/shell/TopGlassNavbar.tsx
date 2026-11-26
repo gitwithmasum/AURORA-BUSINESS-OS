@@ -13,6 +13,7 @@ import {
   Plus,
   Search,
 } from "lucide-react";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { ALL_NAV_ITEMS } from "@/config/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -184,6 +185,9 @@ export function TopGlassNavbar() {
             ref={controlsRef}
             className="ml-auto flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1.5 sm:gap-2"
           >
+            {/* Workspace Selector Capsule */}
+            <WorkspaceSwitcher variant="navbar" />
+
             {/* Live Date & Time Capsule */}
             <div className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 text-xs text-[var(--aurora-text-muted)] md:flex">
               <CalendarClock className="h-3.5 w-3.5 text-[var(--aurora-accent)]" />

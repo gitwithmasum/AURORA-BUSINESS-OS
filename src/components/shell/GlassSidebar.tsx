@@ -40,7 +40,6 @@ import { ROLE_LABELS } from "@/lib/auth/rbac";
 import { cn } from "@/lib/utils/cn";
 import { AuroraBrandTitle, AuroraLogoMark } from "@/components/brand/AuroraLogo";
 import { CustomizeSidebarDialog } from "./CustomizeSidebarDialog";
-import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard,
@@ -191,15 +190,6 @@ function SidebarContent({
           </div>
         </div>
       )}
-
-      {/* Workspace Switcher */}
-      <div className="px-3 pb-1.5">
-        <WorkspaceSwitcher
-          variant="sidebar"
-          collapsed={collapsed}
-          onNavigate={onNavigate}
-        />
-      </div>
 
       {/* Scrollable Navigation (Template 03 Pods / Template 04 Bento Grid + Numbered Groups) */}
       <nav
