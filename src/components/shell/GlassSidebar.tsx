@@ -193,7 +193,7 @@ function SidebarContent({
       )}
 
       {/* Workspace Switcher */}
-      <div className="px-3 pb-2.5">
+      <div className="px-3 pb-1.5">
         <WorkspaceSwitcher
           variant="sidebar"
           collapsed={collapsed}

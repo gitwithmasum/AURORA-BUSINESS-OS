@@ -150,35 +150,40 @@ export function WorkspaceSwitcher({
   }
 
   return (
-    <div className="aurora-glass-subtle rounded-[18px] p-2.5">
-      <div className="mb-1 flex items-center justify-between px-1">
-        <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--aurora-text-muted)]">
+    <div className="aurora-glass-subtle rounded-xl px-2.5 py-1.5 transition-all hover:border-[var(--aurora-accent)]/30">
+      <div className="flex items-center justify-between gap-1.5">
+        <span className="system-code text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--aurora-text-muted)]">
           Workspace
         </span>
-        <GlassBadge tone={badgeTone}>{badgeLabel}</GlassBadge>
+        <GlassBadge
+          tone={badgeTone}
+          className="h-3.5 px-1.5 py-0 text-[8.5px] font-mono leading-none tracking-wider"
+        >
+          {badgeLabel}
+        </GlassBadge>
       </div>
 
       {needsSetup ? (
-        <div className="px-1 py-0.5">
+        <div className="mt-0.5">
           <div className="truncate text-xs font-semibold text-[var(--aurora-text-strong)]">
             {activeName}
           </div>
           <Link
             href="/onboarding"
             onClick={onNavigate}
-            className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-[var(--aurora-accent)] hover:underline"
+            className="mt-0.5 inline-flex items-center gap-1 text-[10px] font-medium text-[var(--aurora-accent)] hover:underline"
           >
-            <PlusCircle className="h-3 w-3" />
-            <span>Setup Your Business</span>
+            <PlusCircle className="h-2.5 w-2.5" />
+            <span>Setup Business</span>
           </Link>
         </div>
       ) : (
-        <>
+        <div className="mt-0.5 space-y-0.5">
           <select
             aria-label="Select workspace"
             value={activeId}
             onChange={(e) => handleSelectChange(e.target.value)}
-            className="w-full cursor-pointer rounded-xl bg-transparent px-1 py-1 text-xs font-semibold text-[var(--aurora-text-strong)] focus:outline-none"
+            className="w-full cursor-pointer rounded bg-transparent py-0 text-[11.5px] font-bold text-[var(--aurora-text-strong)] focus:outline-none"
           >
             {options.map((opt) => (
               <option
@@ -198,10 +203,10 @@ export function WorkspaceSwitcher({
               </option>
             )}
           </select>
-          <div className="px-1 text-[10px] text-[var(--aurora-text-muted)]">
+          <div className="truncate text-[9.5px] leading-tight text-[var(--aurora-text-muted)]">
             {activeCategory} · {activeCurrency}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
