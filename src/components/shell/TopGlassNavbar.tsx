@@ -12,8 +12,8 @@ import {
   Palette,
   Plus,
   Search,
-  Sparkles,
 } from "lucide-react";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 import { ALL_NAV_ITEMS } from "@/config/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/context/ThemeContext";
@@ -33,12 +33,7 @@ export function TopGlassNavbar() {
   const router = useRouter();
   const { user, profile, activeOrg } = useAuth();
   const { themeId, setThemeId, language, setLanguage } = useTheme();
-  const {
-    workspaces,
-    activeWorkspace,
-    setActiveWorkspaceId,
-    setMobileDrawerOpen,
-  } = useWorkspace();
+  const { setMobileDrawerOpen } = useWorkspace();
   const { toast } = useToast();
 
   const [now, setNow] = React.useState<string>("");
@@ -191,32 +186,7 @@ export function TopGlassNavbar() {
           {/* Right: Capsule Controls */}
           <div ref={controlsRef} className="flex flex-wrap items-center gap-2">
             {/* Workspace Selector Capsule (Desktop) */}
-            <div className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 xl:flex">
-              <Sparkles className="h-3.5 w-3.5 text-[var(--aurora-accent)]" />
-              <select
-                aria-label="Active workspace"
-                value={activeWorkspace.id}
-                onChange={(e) => {
-                  setActiveWorkspaceId(e.target.value);
-                  toast({
-                    title: "Workspace switched (Demo)",
-                    description: "Dashboard filters adapted to demo workspace.",
-                    tone: "success",
-                  });
-                }}
-                className="cursor-pointer bg-transparent text-xs font-medium text-[var(--aurora-text-strong)] focus:outline-none"
-              >
-                {workspaces.map((ws) => (
-                  <option
-                    key={ws.id}
-                    value={ws.id}
-                    className="bg-[var(--aurora-surface)] text-[var(--aurora-text-strong)]"
-                  >
-                    {ws.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <WorkspaceSwitcher variant="navbar" />
 
             {/* Live Date & Time Capsule */}
             <div className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 text-xs text-[var(--aurora-text-muted)] md:flex">

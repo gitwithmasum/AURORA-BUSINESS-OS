@@ -35,8 +35,8 @@ import { useTheme } from "@/context/ThemeContext";
 import { useWorkspace } from "@/context/WorkspaceContext";
 import { ROLE_LABELS } from "@/lib/auth/rbac";
 import { cn } from "@/lib/utils/cn";
-import { GlassBadge } from "@/components/ui";
 import { AuroraBrandTitle, AuroraLogoMark } from "@/components/brand/AuroraLogo";
+import { WorkspaceSwitcher } from "./WorkspaceSwitcher";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard,
@@ -69,12 +69,7 @@ function SidebarContent({
   const pathname = usePathname();
   const { language } = useTheme();
   const { user, profile, activeOrg } = useAuth();
-  const {
-    workspaces,
-    activeWorkspace,
-    setActiveWorkspaceId,
-    toggleSidebar,
-  } = useWorkspace();
+  const { toggleSidebar } = useWorkspace();
 
   const displayName = user ? profile?.fullName || user.email || "User" : "Masum Billah";
   const initials = displayName
@@ -133,42 +128,11 @@ function SidebarContent({
 
       {/* Workspace Switcher */}
       <div className="px-3 pb-3">
-        {collapsed ? (
-          <div
-            title={`${activeWorkspace.name} (${activeWorkspace.category})`}
-            className="aurora-glass-subtle mx-auto flex h-10 w-10 items-center justify-center rounded-2xl text-xs font-bold text-[var(--aurora-text-strong)]"
-          >
-            {activeWorkspace.currency}
-          </div>
-        ) : (
-          <div className="aurora-glass-subtle rounded-[18px] p-2.5">
-            <div className="mb-1 flex items-center justify-between px-1">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--aurora-text-muted)]">
-                Workspace
-              </span>
-              <GlassBadge tone="warning">DEMO</GlassBadge>
-            </div>
-            <select
-              aria-label="Select workspace"
-              value={activeWorkspace.id}
-              onChange={(e) => setActiveWorkspaceId(e.target.value)}
-              className="w-full cursor-pointer rounded-xl bg-transparent px-1 py-1 text-xs font-semibold text-[var(--aurora-text-strong)] focus:outline-none"
-            >
-              {workspaces.map((ws) => (
-                <option
-                  key={ws.id}
-                  value={ws.id}
-                  className="bg-[var(--aurora-surface)] text-[var(--aurora-text-strong)]"
-                >
-                  {ws.name}
-                </option>
-              ))}
-            </select>
-            <div className="px-1 text-[10px] text-[var(--aurora-text-muted)]">
-              {activeWorkspace.category} · {activeWorkspace.currency}
-            </div>
-          </div>
-        )}
+        <WorkspaceSwitcher
+          variant="sidebar"
+          collapsed={collapsed}
+          onNavigate={onNavigate}
+        />
       </div>
 
       {/* Scrollable Navigation Groups */}

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import manifest from "../src/app/manifest";
 import { config as middlewareConfig } from "../src/middleware";
+import { formatCategoryLabel } from "../src/lib/utils/format";
 
 describe("PWA Manifest & Middleware Configuration", () => {
   it("provides a valid standalone manifest with required icon sizes", () => {
@@ -24,5 +25,11 @@ describe("PWA Manifest & Middleware Configuration", () => {
     expect(matcher).toContain("manifest");
     expect(matcher).toContain("sw");
     expect(matcher).toContain("icons/");
+  });
+
+  it("formats known and custom business category slugs cleanly", () => {
+    expect(formatCategoryLabel("perfume-fragrance")).toBe("Perfume & Fragrance");
+    expect(formatCategoryLabel("luxury_home_decor")).toBe("Luxury Home Decor");
+    expect(formatCategoryLabel("")).toBe("General Business");
   });
 });
