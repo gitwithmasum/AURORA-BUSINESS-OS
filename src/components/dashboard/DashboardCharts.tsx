@@ -34,15 +34,29 @@ const CHART_COLORS = [
   "var(--aurora-chart-5)",
 ];
 
-export function RevenueProfitChart({ data }: { data: RevenueTrendPoint[] }) {
+export function RevenueProfitChart({
+  data,
+  isLive = false,
+}: {
+  data: RevenueTrendPoint[];
+  isLive?: boolean;
+}) {
   const [mode, setMode] = React.useState<"revenue" | "pnl">("revenue");
 
   return (
     <ChartCard
-      title={mode === "revenue" ? "Revenue Overview (Demo)" : "Profit & Loss Trend (Demo)"}
+      title={
+        mode === "revenue"
+          ? isLive
+            ? "Revenue Overview"
+            : "Revenue Overview (Demo)"
+          : isLive
+            ? "Profit & Loss Trend"
+            : "Profit & Loss Trend (Demo)"
+      }
       subtitle={
         mode === "revenue"
-          ? "Monthly earned revenue vs gross profit across selected fragrance categories"
+          ? "Monthly earned revenue vs gross profit across selected categories"
           : "Gross profit, operating expenses, and net profit progression"
       }
       action={
@@ -156,9 +170,11 @@ export function RevenueProfitChart({ data }: { data: RevenueTrendPoint[] }) {
 export function CashFlowAndCustomerChart({
   cashFlow,
   customerGrowth,
+  isLive = false,
 }: {
   cashFlow: CashFlowPoint[];
   customerGrowth: CustomerGrowthPoint[];
+  isLive?: boolean;
 }) {
   const [view, setView] = React.useState<"cash" | "customers">("cash");
 
@@ -166,8 +182,12 @@ export function CashFlowAndCustomerChart({
     <ChartCard
       title={
         view === "cash"
-          ? "Monthly Cash Flow (Demo)"
-          : "Customer Growth (Demo)"
+          ? isLive
+            ? "Monthly Cash Flow"
+            : "Monthly Cash Flow (Demo)"
+          : isLive
+            ? "Customer Growth"
+            : "Customer Growth (Demo)"
       }
       subtitle={
         view === "cash"
@@ -276,11 +296,21 @@ export function CashFlowAndCustomerChart({
   );
 }
 
-export function ExpenseBreakdownChart({ data }: { data: BreakdownPoint[] }) {
+export function ExpenseBreakdownChart({
+  data,
+  isLive = false,
+}: {
+  data: BreakdownPoint[];
+  isLive?: boolean;
+}) {
   return (
     <ChartCard
-      title="Expense Breakdown (Demo)"
-      subtitle="Estimated allocation across KSA import freight, ads, showroom & fulfillment"
+      title={isLive ? "Expense Breakdown" : "Expense Breakdown (Demo)"}
+      subtitle={
+        isLive
+          ? "Approved expenses grouped by category"
+          : "Estimated allocation across KSA import freight, ads, showroom & fulfillment"
+      }
       heightClass="h-[250px]"
     >
       <div className="grid h-full grid-cols-1 items-center gap-3 sm:grid-cols-2">
@@ -345,9 +375,11 @@ export function ExpenseBreakdownChart({ data }: { data: BreakdownPoint[] }) {
 export function CategoryBrandChart({
   byCategory,
   byBrand,
+  isLive = false,
 }: {
   byCategory: BreakdownPoint[];
   byBrand: BreakdownPoint[];
+  isLive?: boolean;
 }) {
   const [dimension, setDimension] = React.useState<"category" | "brand">(
     "category"
@@ -358,8 +390,12 @@ export function CategoryBrandChart({
     <ChartCard
       title={
         dimension === "category"
-          ? "Sales by Category (Demo)"
-          : "Sales by Brand (Demo)"
+          ? isLive
+            ? "Sales by Fragrance / Category"
+            : "Sales by Category (Demo)"
+          : isLive
+            ? "Sales by Brand"
+            : "Sales by Brand (Demo)"
       }
       subtitle="Compare fragrance portfolio contribution by category or house"
       heightClass="h-[250px]"
@@ -431,12 +467,18 @@ export function CategoryBrandChart({
 
 export function SalesPerformanceChart({
   data,
+  isLive = false,
 }: {
   data: { channel: string; sales: number; orders: number }[];
+  isLive?: boolean;
 }) {
   return (
     <ChartCard
-      title="Sales Performance by Channel (Demo)"
+      title={
+        isLive
+          ? "Sales Performance by Channel"
+          : "Sales Performance by Channel (Demo)"
+      }
       subtitle="Revenue and order volume across Facebook Shop, Showroom, Website & WhatsApp"
       heightClass="h-[250px]"
     >

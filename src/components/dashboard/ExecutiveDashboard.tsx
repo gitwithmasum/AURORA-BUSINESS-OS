@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import {
   AlertTriangle,
@@ -26,8 +28,15 @@ import type {
   DensityMode,
   WidgetId,
 } from "@/types/dashboard";
+import { useAuth } from "@/context/AuthContext";
 import { useWorkspace } from "@/context/WorkspaceContext";
-import { formatCurrency } from "@/lib/utils/format";
+import {
+  buildLiveExecutiveSnapshot,
+  resolveDateWindow,
+  type LiveAnalyticsPayload,
+  type LiveSalesPayload,
+} from "@/lib/dashboard/live-adapter";
+import { formatCategoryLabel, formatCurrency } from "@/lib/utils/format";
 import {
   ConfirmDialog,
   DataTable,
@@ -59,12 +68,29 @@ const LAYOUT_STORAGE_KEY = "aurora_os_dashboard_widgets_v1";
 const DENSITY_STORAGE_KEY = "aurora_os_dashboard_density_v1";
 
 export function ExecutiveDashboard() {
+  const router = useRouter();
+  const { user, activeOrg } = useAuth();
   const { activeWorkspace } = useWorkspace();
   const { toast } = useToast();
+
+  const isLiveMode = Boolean(user && activeOrg);
+  const activeCurrency = (
+    isLiveMode &&
+    (activeOrg?.currency === "BDT" ||
+      activeOrg?.currency === "SAR" ||
+      activeOrg?.currency === "USD")
+      ? activeOrg.currency
+      : activeWorkspace.currency
+  ) as "BDT" | "SAR" | "USD";
 
   const [dateRange, setDateRange] = React.useState<DateRangeKey>("last_30_days");
   const [customDays, setCustomDays] = React.useState<number>(14);
   const [category, setCategory] = React.useState<CategoryFilterKey>("all");
+  const [liveCategoryId, setLiveCategoryId] = React.useState<string>("all");
+  const [liveAnalytics, setLiveAnalytics] =
+    React.useState<LiveAnalyticsPayload | null>(null);
+  const [liveSales, setLiveSales] = React.useState<LiveSalesPayload | null>(null);
+  const [liveLoading, setLiveLoading] = React.useState<boolean>(false);
   const [density, setDensity] = React.useState<DensityMode>("expanded");
   const [widgets, setWidgets] = React.useState<DashboardWidgetConfig[]>(
     DEFAULT_WIDGET_LAYOUT
@@ -136,10 +162,76 @@ export function ExecutiveDashboard() {
     });
   };
 
-  const snapshot = React.useMemo(
-    () => getFilteredExecutiveSnapshot(dateRange, category, customDays),
-    [dateRange, category, customDays]
-  );
+  React.useEffect(() => {
+    if (!user || !activeOrg) {
+      setLiveAnalytics(null);
+      setLiveSales(null);
+      return;
+    }
+
+    let cancelled = false;
+    const { startDate, endDate } = resolveDateWindow(dateRange, customDays);
+    const analyticsParams = new URLSearchParams({
+      organizationId: activeOrg.organizationId,
+      startDate,
+      endDate,
+    });
+    if (liveCategoryId !== "all") {
+      analyticsParams.set("categoryId", liveCategoryId);
+    }
+
+    const salesParams = new URLSearchParams({
+      organizationId: activeOrg.organizationId,
+      startDate,
+      endDate,
+    });
+
+    setLiveLoading(true);
+    Promise.all([
+      fetch(`/api/analytics?${analyticsParams.toString()}`).then((r) =>
+        r.ok ? r.json() : null
+      ),
+      fetch(`/api/sales?${salesParams.toString()}`).then((r) =>
+        r.ok ? r.json() : null
+      ),
+    ])
+      .then(([analyticsJson, salesJson]) => {
+        if (cancelled) return;
+        if (analyticsJson?.analytics) {
+          setLiveAnalytics(analyticsJson as LiveAnalyticsPayload);
+        }
+        if (salesJson?.sales) {
+          setLiveSales(salesJson as LiveSalesPayload);
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLiveLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, activeOrg, dateRange, customDays, liveCategoryId]);
+
+  const snapshot = React.useMemo(() => {
+    if (isLiveMode && liveAnalytics) {
+      return buildLiveExecutiveSnapshot({
+        analyticsData: liveAnalytics,
+        salesData: liveSales,
+        currency: activeCurrency,
+      });
+    }
+    return getFilteredExecutiveSnapshot(dateRange, category, customDays);
+  }, [
+    isLiveMode,
+    liveAnalytics,
+    liveSales,
+    activeCurrency,
+    dateRange,
+    category,
+    customDays,
+  ]);
 
   const orderColumns = React.useMemo<ColumnDef<DemoPerfumeOrder>[]>(
     () => [
@@ -200,7 +292,7 @@ export function ExecutiveDashboard() {
         header: "Total",
         cell: ({ row }) => (
           <span className="font-semibold text-[var(--aurora-text-strong)]">
-            {formatCurrency(row.original.amountBdt)}
+            {formatCurrency(row.original.amountBdt, activeCurrency)}
           </span>
         ),
       },
@@ -220,7 +312,7 @@ export function ExecutiveDashboard() {
         ),
       },
     ],
-    []
+    [activeCurrency]
   );
 
   const renderWidget = (widget: DashboardWidgetConfig) => {
@@ -233,8 +325,8 @@ export function ExecutiveDashboard() {
       case "revenue_profit":
         return (
           <div key={widget.id} className="grid gap-5 xl:grid-cols-2">
-            <RevenueProfitChart data={snapshot.revenueTrend} />
-            <SalesPerformanceChart data={snapshot.salesPerformance} />
+            <RevenueProfitChart data={snapshot.revenueTrend} isLive={isLiveMode} />
+            <SalesPerformanceChart data={snapshot.salesPerformance} isLive={isLiveMode} />
           </div>
         );
 
@@ -244,6 +336,7 @@ export function ExecutiveDashboard() {
             key={widget.id}
             cashFlow={snapshot.cashFlow}
             customerGrowth={snapshot.customerGrowth}
+            isLive={isLiveMode}
           />
         );
 
@@ -252,6 +345,7 @@ export function ExecutiveDashboard() {
           <ExpenseBreakdownChart
             key={widget.id}
             data={snapshot.expenseBreakdown}
+            isLive={isLiveMode}
           />
         );
 
@@ -261,6 +355,7 @@ export function ExecutiveDashboard() {
             key={widget.id}
             byCategory={snapshot.salesByCategory}
             byBrand={snapshot.salesByBrand}
+            isLive={isLiveMode}
           />
         );
 
@@ -269,47 +364,66 @@ export function ExecutiveDashboard() {
           <GlassCard key={widget.id}>
             <GlassCardHeader>
               <div>
-                <GlassCardTitle>Top-Selling Perfumes (Demo)</GlassCardTitle>
+                <GlassCardTitle>
+                  {isLiveMode
+                    ? "Top-Selling Products"
+                    : "Top-Selling Perfumes (Demo)"}
+                </GlassCardTitle>
                 <GlassCardDescription>
-                  Ranked from illustrative sample records; live ranking activates in Phase 4
+                  {isLiveMode
+                    ? "Ranked directly from recorded completed sales in your workspace"
+                    : "Ranked from illustrative sample records; sign in to connect live data"}
                 </GlassCardDescription>
               </div>
-              <GlassBadge tone="accent">Sample Catalog</GlassBadge>
+              <GlassBadge tone={isLiveMode ? "success" : "accent"}>
+                {isLiveMode ? "Live Ranking" : "Sample Catalog"}
+              </GlassBadge>
             </GlassCardHeader>
             <GlassCardContent>
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                {snapshot.topProducts.map((prod) => (
-                  <div
-                    key={prod.id}
-                    className="aurora-glass-subtle flex flex-col justify-between rounded-[18px] p-4"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--aurora-accent)]">
-                          {prod.brand} · {prod.volumeMl}ml
+              {snapshot.topProducts.length === 0 ? (
+                <div className="aurora-glass-subtle flex flex-wrap items-center justify-between gap-3 rounded-[18px] p-4 text-xs text-[var(--aurora-text-muted)]">
+                  <span>No completed product sales recorded in this period yet.</span>
+                  <Link href="/sales">
+                    <GlassButton size="sm" variant="primary">
+                      Record First Sale
+                    </GlassButton>
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                  {snapshot.topProducts.map((prod) => (
+                    <div
+                      key={prod.id}
+                      className="aurora-glass-subtle flex flex-col justify-between rounded-[18px] p-4"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--aurora-accent)]">
+                            {prod.brand} · {prod.volumeMl}ml
+                          </div>
+                          <div className="mt-0.5 text-sm font-semibold text-[var(--aurora-text-strong)]">
+                            {prod.name}
+                          </div>
+                          <div className="text-[11px] text-[var(--aurora-text-muted)]">
+                            SKU: {prod.sku}
+                          </div>
                         </div>
-                        <div className="mt-0.5 text-sm font-semibold text-[var(--aurora-text-strong)]">
-                          {prod.name}
-                        </div>
-                        <div className="text-[11px] text-[var(--aurora-text-muted)]">
-                          SKU: {prod.sku}
-                        </div>
+                        <GlassBadge tone={prod.stockQty <= 8 ? "warning" : "success"}>
+                          {prod.stockQty} left
+                        </GlassBadge>
                       </div>
-                      <GlassBadge tone={prod.stockQty <= 8 ? "warning" : "success"}>
-                        {prod.stockQty} left
-                      </GlassBadge>
+                      <div className="mt-3 flex items-center justify-between border-t border-[var(--aurora-glass-border)] pt-2.5 text-xs">
+                        <span className="text-[var(--aurora-text-muted)]">
+                          {prod.unitsSold} units · {prod.grossMarginPct}% GM
+                        </span>
+                        <span className="font-semibold text-[var(--aurora-text-strong)]">
+                          {formatCurrency(prod.revenueBdt, activeCurrency)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="mt-3 flex items-center justify-between border-t border-[var(--aurora-glass-border)] pt-2.5 text-xs">
-                      <span className="text-[var(--aurora-text-muted)]">
-                        {prod.unitsSold} units · {prod.grossMarginPct}% GM
-                      </span>
-                      <span className="font-semibold text-[var(--aurora-text-strong)]">
-                        {formatCurrency(prod.revenueBdt)}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </GlassCardContent>
           </GlassCard>
         );
@@ -319,17 +433,29 @@ export function ExecutiveDashboard() {
           <GlassCard key={widget.id}>
             <GlassCardHeader className="mb-4">
               <div>
-                <GlassCardTitle>Recent Sales Orders (Sample Data)</GlassCardTitle>
+                <GlassCardTitle>
+                  {isLiveMode
+                    ? "Recent Sales Orders"
+                    : "Recent Sales Orders (Sample Data)"}
+                </GlassCardTitle>
                 <GlassCardDescription>
-                  Interactive TanStack Table preview — click View to inspect sample invoice details
+                  {isLiveMode
+                    ? "Live organization orders — click View to inspect details"
+                    : "Interactive TanStack Table preview — click View to inspect sample invoice details"}
                 </GlassCardDescription>
               </div>
-              <GlassBadge tone="warning">Demo Records</GlassBadge>
+              <GlassBadge tone={isLiveMode ? "success" : "warning"}>
+                {isLiveMode ? "Live Orders" : "Demo Records"}
+              </GlassBadge>
             </GlassCardHeader>
             <DataTable
               columns={orderColumns}
               data={snapshot.recentOrders}
-              searchPlaceholder="Filter demo orders by customer, brand, channel..."
+              searchPlaceholder={
+                isLiveMode
+                  ? "Filter orders by customer, invoice, channel..."
+                  : "Filter demo orders by customer, brand, channel..."
+              }
               pageSize={density === "compact" ? 4 : 5}
             />
           </GlassCard>
@@ -340,64 +466,83 @@ export function ExecutiveDashboard() {
           <GlassCard key={widget.id}>
             <GlassCardHeader>
               <div>
-                <GlassCardTitle>Stock Alert Preview (Demo)</GlassCardTitle>
+                <GlassCardTitle>
+                  {isLiveMode ? "Stock Alerts" : "Stock Alert Preview (Demo)"}
+                </GlassCardTitle>
                 <GlassCardDescription>
                   Configurable reorder alerts based on minimum stock thresholds
                 </GlassCardDescription>
               </div>
-              <GlassBadge tone="warning" dot>
-                {snapshot.stockAlerts.length} Demo Alerts
+              <GlassBadge tone={snapshot.stockAlerts.length > 0 ? "warning" : "success"} dot>
+                {isLiveMode
+                  ? `${snapshot.stockAlerts.length} Active Alerts`
+                  : `${snapshot.stockAlerts.length} Demo Alerts`}
               </GlassBadge>
             </GlassCardHeader>
             <GlassCardContent>
-              <div className="grid gap-3 md:grid-cols-2">
-                {snapshot.stockAlerts.map((alert) => (
-                  <div
-                    key={alert.id}
-                    className="aurora-glass-subtle flex flex-wrap items-center justify-between gap-3 rounded-[18px] p-4"
-                  >
-                    <div className="min-w-0 flex-1">
+              {snapshot.stockAlerts.length === 0 ? (
+                <div className="aurora-glass-subtle flex flex-wrap items-center justify-between gap-3 rounded-[18px] p-4 text-xs text-[var(--aurora-text-muted)]">
+                  <span>All stocked SKUs are currently above minimum alert thresholds.</span>
+                  <Link href="/inventory">
+                    <GlassButton size="sm" variant="secondary">
+                      Open Inventory
+                    </GlassButton>
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid gap-3 md:grid-cols-2">
+                  {snapshot.stockAlerts.map((alert) => (
+                    <div
+                      key={alert.id}
+                      className="aurora-glass-subtle flex flex-wrap items-center justify-between gap-3 rounded-[18px] p-4"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-[var(--aurora-warning)]" />
+                          <span className="truncate text-sm font-semibold text-[var(--aurora-text-strong)]">
+                            {alert.productName}
+                          </span>
+                        </div>
+                        <div className="mt-1 text-xs text-[var(--aurora-text-muted)]">
+                          {alert.sku} · On hand:{" "}
+                          <strong className="text-[var(--aurora-text-strong)]">
+                            {alert.stockQty}
+                          </strong>{" "}
+                          / Min: {alert.minStock}
+                        </div>
+                      </div>
                       <div className="flex items-center gap-2">
-                        <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-[var(--aurora-warning)]" />
-                        <span className="truncate text-sm font-semibold text-[var(--aurora-text-strong)]">
-                          {alert.productName}
-                        </span>
-                      </div>
-                      <div className="mt-1 text-xs text-[var(--aurora-text-muted)]">
-                        {alert.sku} · On hand:{" "}
-                        <strong className="text-[var(--aurora-text-strong)]">
-                          {alert.stockQty}
-                        </strong>{" "}
-                        / Min: {alert.minStock}
+                        <GlassBadge
+                          tone={
+                            alert.severity === "Out of Stock"
+                              ? "danger"
+                              : "warning"
+                          }
+                        >
+                          {alert.severity}
+                        </GlassBadge>
+                        <GlassButton
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => {
+                            if (isLiveMode) {
+                              router.push("/purchases");
+                              return;
+                            }
+                            toast({
+                              title: `Reorder Draft Preview (${alert.sku})`,
+                              description: `Suggested quantity: ${alert.suggestedReorder} units.`,
+                              tone: "info",
+                            });
+                          }}
+                        >
+                          Reorder +{alert.suggestedReorder}
+                        </GlassButton>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <GlassBadge
-                        tone={
-                          alert.severity === "Out of Stock"
-                            ? "danger"
-                            : "warning"
-                        }
-                      >
-                        {alert.severity}
-                      </GlassBadge>
-                      <GlassButton
-                        size="sm"
-                        variant="secondary"
-                        onClick={() =>
-                          toast({
-                            title: `Reorder Draft Preview (${alert.sku})`,
-                            description: `Suggested quantity: ${alert.suggestedReorder} units. PO creation unlocks in Phase 4.`,
-                            tone: "info",
-                          })
-                        }
-                      >
-                        Reorder +{alert.suggestedReorder}
-                      </GlassButton>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </GlassCardContent>
           </GlassCard>
         );
@@ -409,22 +554,43 @@ export function ExecutiveDashboard() {
 
   return (
     <div className="space-y-5">
-      {/* Explicit Demo Notice Page Header */}
+      {/* Live Organization or Demo Notice Page Header */}
       <PageHeader
-        title={activeWorkspace.name}
-        subtitle="All figures below are illustrative demo records for UI & analytics verification — not connected to a live Supabase database yet."
+        title={isLiveMode ? activeOrg!.organizationName : activeWorkspace.name}
+        subtitle={
+          isLiveMode
+            ? `Real-time executive overview for ${activeOrg!.organizationName} (${activeCurrency})${liveLoading ? " · Syncing..." : ""}`
+            : "All figures below are illustrative demo records for UI & analytics verification — sign in to view live organization records."
+        }
         leading={
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[color-mix(in_srgb,var(--aurora-warning)_18%,transparent)] text-[var(--aurora-warning)]">
+          <div
+            className={`flex h-10 w-10 items-center justify-center rounded-2xl ${
+              isLiveMode
+                ? "bg-[color-mix(in_srgb,var(--aurora-success)_18%,transparent)] text-[var(--aurora-success)]"
+                : "bg-[color-mix(in_srgb,var(--aurora-warning)_18%,transparent)] text-[var(--aurora-warning)]"
+            }`}
+          >
             <Sparkles className="h-4 w-4" />
           </div>
         }
         badges={
-          <>
-            <GlassBadge tone="warning" dot>
-              SAMPLE / DEMO DATA ONLY
-            </GlassBadge>
-            <GlassBadge tone="info">Part 01 Foundation</GlassBadge>
-          </>
+          isLiveMode ? (
+            <>
+              <GlassBadge tone="success" dot>
+                LIVE DATABASE
+              </GlassBadge>
+              <GlassBadge tone="info">
+                {formatCategoryLabel(activeOrg!.categorySlug)}
+              </GlassBadge>
+            </>
+          ) : (
+            <>
+              <GlassBadge tone="warning" dot>
+                SAMPLE / DEMO DATA ONLY
+              </GlassBadge>
+              <GlassBadge tone="info">Preview Mode</GlassBadge>
+            </>
+          )
         }
         actions={
           <>
@@ -497,16 +663,32 @@ export function ExecutiveDashboard() {
               </div>
             )}
 
-            <FilterDropdown
-              label="Category"
-              value={category}
-              icon={<LayoutGrid className="h-3.5 w-3.5" />}
-              options={CATEGORY_FILTER_OPTIONS.map((c) => ({
-                value: c.key,
-                label: c.label,
-              }))}
-              onChange={(val) => setCategory(val)}
-            />
+            {isLiveMode ? (
+              <FilterDropdown
+                label="Category"
+                value={liveCategoryId}
+                icon={<LayoutGrid className="h-3.5 w-3.5" />}
+                options={[
+                  { value: "all", label: "All Categories" },
+                  ...(liveAnalytics?.dimensions.categories ?? []).map((c) => ({
+                    value: c.id,
+                    label: c.name,
+                  })),
+                ]}
+                onChange={(val) => setLiveCategoryId(val)}
+              />
+            ) : (
+              <FilterDropdown
+                label="Category"
+                value={category}
+                icon={<LayoutGrid className="h-3.5 w-3.5" />}
+                options={CATEGORY_FILTER_OPTIONS.map((c) => ({
+                  value: c.key,
+                  label: c.label,
+                }))}
+                onChange={(val) => setCategory(val)}
+              />
+            )}
           </div>
         </div>
       </GlassCard>
@@ -537,25 +719,42 @@ export function ExecutiveDashboard() {
         onConfirm={handleResetWidgets}
       />
 
-      {/* Sample Order Detail Slide-over Drawer */}
+      {/* Order Detail Slide-over Drawer */}
       <Drawer
         open={Boolean(selectedOrder)}
         onOpenChange={(open) => !open && setSelectedOrder(null)}
-        title={selectedOrder ? `Sample Order ${selectedOrder.invoiceNo}` : ""}
-        description="Illustrative demo record — live invoice PDF export & payment reconciliation arrive in Part 02+."
+        title={
+          selectedOrder
+            ? `${isLiveMode ? "Order" : "Sample Order"} ${selectedOrder.invoiceNo}`
+            : ""
+        }
+        description={
+          isLiveMode
+            ? "Recorded sales transaction summary — open Sales or Orders for PDF invoices."
+            : "Illustrative demo record — sign in to inspect real organization invoices."
+        }
         footer={
-          <GlassButton
-            variant="primary"
-            size="sm"
-            onClick={() => setSelectedOrder(null)}
-          >
-            Close Preview
-          </GlassButton>
+          <div className="flex items-center gap-2">
+            {isLiveMode && (
+              <Link href="/orders">
+                <GlassButton variant="secondary" size="sm">
+                  Open Orders
+                </GlassButton>
+              </Link>
+            )}
+            <GlassButton
+              variant="primary"
+              size="sm"
+              onClick={() => setSelectedOrder(null)}
+            >
+              Close Preview
+            </GlassButton>
+          </div>
         }
       >
         {selectedOrder && (
           <div className="space-y-3.5">
-            <FormField label="Customer (Sample)">
+            <FormField label={isLiveMode ? "Customer" : "Customer (Sample)"}>
               <div className="aurora-glass-subtle rounded-2xl px-3.5 py-2.5 text-sm text-[var(--aurora-text-strong)]">
                 {selectedOrder.customer}
               </div>
@@ -565,7 +764,7 @@ export function ExecutiveDashboard() {
                 {selectedOrder.date}
               </div>
             </FormField>
-            <FormField label="Perfume & Brand">
+            <FormField label="Product Summary">
               <div className="aurora-glass-subtle rounded-2xl px-3.5 py-2.5 text-sm text-[var(--aurora-text-strong)]">
                 {selectedOrder.product} — {selectedOrder.brand}
               </div>
@@ -577,7 +776,7 @@ export function ExecutiveDashboard() {
             </FormField>
             <FormField label="Order Total">
               <div className="aurora-glass-subtle rounded-2xl px-3.5 py-2.5 text-sm font-bold text-[var(--aurora-text-strong)]">
-                {formatCurrency(selectedOrder.amountBdt)}
+                {formatCurrency(selectedOrder.amountBdt, activeCurrency)}
               </div>
             </FormField>
           </div>

@@ -41,10 +41,10 @@ export default function ModuleRoadmapPage() {
               <GlassBadge tone="info">
                 {navItem?.phase ?? "Scheduled Phase"}
               </GlassBadge>
-              <GlassBadge tone={isSettings || isCategories ? "success" : "warning"}>
+              <GlassBadge tone={isSettings || isCategories ? "success" : "info"}>
                 {isSettings || isCategories
-                  ? "Part 02 Backend Wired"
-                  : "Module Shell · Awaiting Part 03+"}
+                  ? "Workspace Connected"
+                  : "AURORA BUSINESS OS Module"}
               </GlassBadge>
             </div>
             <GlassCardTitle className="text-xl">

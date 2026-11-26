@@ -12,9 +12,9 @@ export const NAVIGATION_GROUPS: NavGroup[] = [
         labelBn: "ওভারভিউ",
         href: "/",
         iconName: "LayoutDashboard",
-        phase: "Active (Demo)",
+        phase: "Active",
         description:
-          "Modular executive KPIs, revenue & profit trends, stock alerts, and recent demo transactions.",
+          "Modular executive KPIs, revenue & profit trends, stock alerts, and recent orders.",
       },
       {
         id: "analytics",
