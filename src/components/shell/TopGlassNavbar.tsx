@@ -152,8 +152,8 @@ export function TopGlassNavbar() {
     <>
       <header className="sticky top-4 z-30 mb-5">
         <div className="aurora-glass flex flex-wrap items-center justify-between gap-2.5 rounded-[24px] px-3 py-2.5 sm:px-4">
-          {/* Left: Mobile Menu + Global Search Capsule */}
-          <div className="flex min-w-0 flex-1 basis-[220px] items-center gap-2">
+          {/* Left: Mobile Menu + Minimalist Search Icon */}
+          <div className="flex shrink-0 items-center gap-2">
             <GlassButton
               variant="capsule"
               size="icon"
@@ -164,29 +164,26 @@ export function TopGlassNavbar() {
               <Menu className="h-4 w-4" />
             </GlassButton>
 
-            <button
-              type="button"
+            <GlassButton
+              variant="capsule"
+              size="icon"
+              aria-label="Open global search (Ctrl+K)"
+              title={
+                language === "bn"
+                  ? "সার্চ করুন (Ctrl+K)"
+                  : "Search (Ctrl+K)"
+              }
+              className="h-9 w-9 shrink-0"
               onClick={() => setSearchOpen(true)}
-              className="aurora-capsule flex h-10 min-w-0 flex-1 max-w-md cursor-pointer items-center justify-between gap-2 overflow-hidden px-3.5 text-left text-[13px] font-semibold text-[var(--aurora-text)] transition-all hover:border-[var(--aurora-glass-border-strong)] hover:text-[var(--aurora-text-strong)]"
             >
-              <span className="flex min-w-0 flex-1 items-center gap-2">
-                <Search className="h-3.5 w-3.5 shrink-0 text-[var(--aurora-accent)]" />
-                <span className="min-w-0 truncate">
-                  {language === "bn"
-                    ? "পণ্য, কাস্টমার, সাপ্লায়ার বা মডিউল খুঁজুন..."
-                    : "Search products, customers, suppliers, modules..."}
-                </span>
-              </span>
-              <kbd className="system-code hidden shrink-0 rounded-md border border-[var(--aurora-glass-border)] px-1.5 py-0.5 text-[11px] font-semibold md:inline-block">
-                Ctrl K
-              </kbd>
-            </button>
+              <Search className="h-4 w-4 text-[var(--aurora-accent)]" />
+            </GlassButton>
           </div>
 
           {/* Right: Capsule Controls */}
           <div
             ref={controlsRef}
-            className="ml-auto flex w-full max-w-full shrink-0 flex-wrap items-center justify-end gap-1.5 sm:w-auto sm:gap-2"
+            className="ml-auto flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1.5 sm:gap-2"
           >
             {/* Workspace Selector Capsule (Desktop) */}
             <WorkspaceSwitcher variant="navbar" />
