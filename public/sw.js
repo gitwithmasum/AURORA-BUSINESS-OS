@@ -34,6 +34,24 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
+  if (
+    url.origin === "https://fonts.googleapis.com" ||
+    url.origin === "https://fonts.gstatic.com"
+  ) {
+    event.respondWith(
+      caches.match(request).then((cached) => {
+        if (cached) return cached;
+        return fetch(request).then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_VERSION).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        });
+      })
+    );
+    return;
+  }
   if (url.origin !== self.location.origin) return;
   if (url.pathname.startsWith("/api/")) return;
 

@@ -1,44 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import {
-  JetBrains_Mono,
-  Michroma,
-  Noto_Sans_Bengali,
-  Space_Grotesk,
-} from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { WorkspaceProvider } from "@/context/WorkspaceContext";
 import { ToastProvider } from "@/components/ui";
 import { AppShell } from "@/components/shell/AppShell";
-
-const michroma = Michroma({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-michroma",
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
-});
-
-const notoSansBengali = Noto_Sans_Bengali({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["bengali"],
-  variable: "--font-bengali",
-  display: "swap",
-});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -80,12 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      data-theme="midnight-blue"
-      suppressHydrationWarning
-      className={`${michroma.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${notoSansBengali.variable}`}
-    >
+    <html lang="en" data-theme="midnight-blue" suppressHydrationWarning>
       <body className="antialiased">
         <ThemeProvider>
           <AuthProvider>
