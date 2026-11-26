@@ -3,6 +3,7 @@
 import * as React from "react";
 import { GlassSidebar } from "./GlassSidebar";
 import { TopGlassNavbar } from "./TopGlassNavbar";
+import { PwaProvider } from "@/components/pwa/PwaProvider";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -14,6 +15,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <main className="pb-10">{children}</main>
         </div>
       </div>
+      <PwaProvider />
     </div>
   );
 }

@@ -8,6 +8,7 @@ const PUBLIC_PATHS = [
   "/auth/forgot-password",
   "/auth/reset-password",
   "/auth/callback",
+  "/offline",
 ];
 
 function isPublicPath(pathname: string): boolean {
@@ -20,7 +21,10 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/favicon.ico") ||
-    pathname.startsWith("/api/")
+    pathname.startsWith("/api/") ||
+    pathname === "/manifest.webmanifest" ||
+    pathname === "/sw.js" ||
+    pathname.startsWith("/icons/")
   ) {
     return NextResponse.next();
   }
@@ -73,6 +77,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|manifest\\.webmanifest|sw\\.js|icons/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|webmanifest)$).*)",
   ],
 };
