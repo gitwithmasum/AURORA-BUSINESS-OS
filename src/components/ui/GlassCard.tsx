@@ -66,7 +66,7 @@ export function GlassCardTitle({
   return (
     <h3
       className={cn(
-        "text-base font-semibold tracking-tight text-[var(--aurora-text-strong)]",
+        "text-[16px] sm:text-[17px] font-semibold tracking-tight text-[var(--aurora-text-strong)]",
         className
       )}
       {...props}

@@ -62,8 +62,8 @@ export function KpiCard({
 
         <div
           className={cn(
-            "font-bold tracking-tight text-[var(--aurora-text-strong)]",
-            compact ? "mt-2 text-lg" : "mt-3 text-2xl"
+            "financial-value font-bold tracking-tight text-[var(--aurora-text-strong)]",
+            compact ? "mt-2 text-xl" : "mt-3 text-2xl sm:text-[26px]"
           )}
         >
           {value}

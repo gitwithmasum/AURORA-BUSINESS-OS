@@ -112,8 +112,8 @@ export function AuroraBrandTitle({
     <div className={cn("min-w-0 leading-none", className)}>
       <div
         className={cn(
-          "truncate font-bold tracking-[0.14em] bg-gradient-to-r from-[#FFF0B8] via-[#F2BE58] to-[#D9912E] [[data-theme='light-glass']_&]:from-[#C27D16] [[data-theme='light-glass']_&]:via-[#9E5F0B] [[data-theme='light-glass']_&]:to-[#754305] bg-clip-text text-transparent drop-shadow-[0_1px_1px_rgba(0,0,0,0.22)]",
-          compact ? "text-sm" : "text-base"
+          "font-display truncate font-normal tracking-[0.1em] bg-gradient-to-r from-[#FFF0B8] via-[#F2BE58] to-[#D9912E] [[data-theme='light-glass']_&]:from-[#C27D16] [[data-theme='light-glass']_&]:via-[#9E5F0B] [[data-theme='light-glass']_&]:to-[#754305] bg-clip-text text-transparent drop-shadow-[0_1px_1px_rgba(0,0,0,0.22)]",
+          compact ? "text-[17px]" : "text-[21px]"
         )}
       >
         AURORA

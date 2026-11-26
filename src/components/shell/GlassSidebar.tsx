@@ -148,7 +148,7 @@ function SidebarContent({
                 <button
                   type="button"
                   onClick={() => toggleGroup(group.id)}
-                  className="flex w-full cursor-pointer items-center justify-between px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-[var(--aurora-text-muted)] transition-colors hover:text-[var(--aurora-text-strong)]"
+                  className="system-code flex w-full cursor-pointer items-center justify-between px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-widest text-[var(--aurora-text-muted)] transition-colors hover:text-[var(--aurora-text-strong)]"
                 >
                   <span>{language === "bn" ? group.labelBn : group.label}</span>
                   <ChevronDown
@@ -175,11 +175,11 @@ function SidebarContent({
                           href={item.href}
                           onClick={onNavigate}
                           className={cn(
-                            "relative flex items-center gap-3 rounded-[16px] px-3 py-2.5 text-xs font-medium transition-all duration-150",
+                            "relative flex items-center gap-3 rounded-[16px] px-3 py-2.5 text-[13.5px] transition-all duration-150",
                             collapsed && "justify-center px-0",
                             isActive
-                              ? "text-[var(--aurora-text-strong)]"
-                              : "text-[var(--aurora-text-muted)] hover:bg-[var(--aurora-glass-bg-subtle)] hover:text-[var(--aurora-text-strong)] hover:shadow-[0_0_18px_-6px_var(--aurora-glow)]"
+                              ? "font-bold text-[var(--aurora-text-strong)]"
+                              : "font-semibold text-[var(--aurora-text-muted)] hover:bg-[var(--aurora-glass-bg-subtle)] hover:text-[var(--aurora-text-strong)] hover:shadow-[0_0_18px_-6px_var(--aurora-glow)]"
                           )}
                         >
                           {isActive && (

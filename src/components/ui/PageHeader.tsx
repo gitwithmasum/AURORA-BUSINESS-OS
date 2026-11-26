@@ -28,13 +28,13 @@ export function PageHeader({
           {leading && <div className="shrink-0">{leading}</div>}
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-base font-bold tracking-tight text-[var(--aurora-text-strong)] sm:text-lg">
+              <h1 className="font-display text-lg font-normal tracking-[0.02em] text-[var(--aurora-text-strong)] sm:text-[22px] lg:text-[24px]">
                 {title}
               </h1>
               {badges}
             </div>
             {subtitle && (
-              <p className="mt-0.5 text-xs text-[var(--aurora-text-muted)]">
+              <p className="mt-1 text-sm text-[var(--aurora-text-muted)]">
                 {subtitle}
               </p>
             )}

@@ -167,7 +167,7 @@ export function TopGlassNavbar() {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="aurora-capsule flex h-10 w-full max-w-md cursor-pointer items-center justify-between gap-3 px-4 text-left text-xs text-[var(--aurora-text-muted)] transition-all hover:border-[var(--aurora-glass-border-strong)] hover:text-[var(--aurora-text-strong)]"
+              className="aurora-capsule flex h-10 w-full max-w-md cursor-pointer items-center justify-between gap-3 px-4 text-left text-[13px] font-semibold text-[var(--aurora-text)] transition-all hover:border-[var(--aurora-glass-border-strong)] hover:text-[var(--aurora-text-strong)]"
             >
               <span className="flex items-center gap-2 truncate">
                 <Search className="h-3.5 w-3.5 shrink-0 text-[var(--aurora-accent)]" />
@@ -177,7 +177,7 @@ export function TopGlassNavbar() {
                     : "Search products, customers, suppliers, modules..."}
                 </span>
               </span>
-              <kbd className="hidden rounded-md border border-[var(--aurora-glass-border)] px-1.5 py-0.5 text-[10px] font-semibold sm:inline-block">
+              <kbd className="system-code hidden rounded-md border border-[var(--aurora-glass-border)] px-1.5 py-0.5 text-[11px] font-semibold sm:inline-block">
                 Ctrl K
               </kbd>
             </button>
@@ -191,7 +191,7 @@ export function TopGlassNavbar() {
             {/* Live Date & Time Capsule */}
             <div className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 text-xs text-[var(--aurora-text-muted)] md:flex">
               <CalendarClock className="h-3.5 w-3.5 text-[var(--aurora-accent)]" />
-              <span className="font-medium text-[var(--aurora-text)]">
+              <span className="timestamp text-[12px] font-semibold text-[var(--aurora-text-strong)]">
                 {now || "Loading..."}
               </span>
             </div>
@@ -201,7 +201,7 @@ export function TopGlassNavbar() {
               <GlassButton
                 variant="primary"
                 size="sm"
-                className="h-9 rounded-full px-3.5"
+                className="h-9 rounded-full px-3.5 text-[13px] font-semibold"
                 onClick={() => {
                   setQuickCreateOpen((v) => !v);
                   setThemeMenuOpen(false);
@@ -241,7 +241,7 @@ export function TopGlassNavbar() {
             <GlassButton
               variant="capsule"
               size="sm"
-              className="h-9 px-3"
+              className="h-9 px-3 text-[13px] font-bold"
               aria-label="Toggle language"
               onClick={() => {
                 const next = language === "en" ? "bn" : "en";
@@ -440,7 +440,7 @@ export function TopGlassNavbar() {
                   .slice(0, 2)
                   .toUpperCase()}
               </span>
-              <span className="hidden text-xs font-medium text-[var(--aurora-text-strong)] sm:inline">
+              <span className="hidden text-[13px] font-semibold text-[var(--aurora-text-strong)] sm:inline">
                 {user ? "Profile" : "Sign In"}
               </span>
             </Link>

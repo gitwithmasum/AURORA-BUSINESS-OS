@@ -100,7 +100,7 @@ export function GlassChartTooltip({
                 />
                 {entry.name}
               </span>
-              <span className="font-semibold text-[var(--aurora-text-strong)]">
+              <span className="financial-value font-semibold text-[var(--aurora-text-strong)]">
                 {formatted}
               </span>
             </div>

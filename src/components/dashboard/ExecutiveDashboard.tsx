@@ -239,7 +239,7 @@ export function ExecutiveDashboard() {
         accessorKey: "invoiceNo",
         header: "Invoice",
         cell: ({ row }) => (
-          <span className="font-semibold text-[var(--aurora-text-strong)]">
+          <span className="system-code text-xs font-semibold text-[var(--aurora-accent)]">
             {row.original.invoiceNo}
           </span>
         ),
@@ -291,7 +291,7 @@ export function ExecutiveDashboard() {
         accessorKey: "amountBdt",
         header: "Total",
         cell: ({ row }) => (
-          <span className="font-semibold text-[var(--aurora-text-strong)]">
+          <span className="financial-value font-semibold text-[var(--aurora-text-strong)]">
             {formatCurrency(row.original.amountBdt, activeCurrency)}
           </span>
         ),

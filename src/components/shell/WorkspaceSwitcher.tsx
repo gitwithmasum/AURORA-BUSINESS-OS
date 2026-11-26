@@ -95,7 +95,7 @@ export function WorkspaceSwitcher({
       return (
         <Link
           href="/onboarding"
-          className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 text-xs font-medium text-[var(--aurora-text-strong)] transition-colors hover:border-[var(--aurora-glass-border-strong)] xl:flex"
+          className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 text-[13px] font-semibold text-[var(--aurora-text-strong)] transition-colors hover:border-[var(--aurora-glass-border-strong)] xl:flex"
         >
           <PlusCircle className="h-3.5 w-3.5 text-[var(--aurora-accent)]" />
           <span>Setup Business</span>
@@ -110,7 +110,7 @@ export function WorkspaceSwitcher({
           aria-label="Active workspace"
           value={activeId}
           onChange={(e) => handleSelectChange(e.target.value)}
-          className="cursor-pointer bg-transparent text-xs font-medium text-[var(--aurora-text-strong)] focus:outline-none"
+          className="cursor-pointer bg-transparent text-[13px] font-semibold text-[var(--aurora-text-strong)] focus:outline-none"
         >
           {options.map((opt) => (
             <option
