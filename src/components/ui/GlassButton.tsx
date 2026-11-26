@@ -51,7 +51,7 @@ export const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>
         type={type}
         disabled={disabled || loading}
         className={cn(
-          "inline-flex cursor-pointer items-center justify-center whitespace-nowrap font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-accent)] disabled:pointer-events-none disabled:opacity-50",
+          "inline-flex shrink-0 cursor-pointer items-center justify-center whitespace-nowrap font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--aurora-accent)] disabled:pointer-events-none disabled:opacity-50",
           variantClasses[variant],
           variant === "capsule" && size !== "icon" ? "rounded-full" : "",
           sizeClasses[size],

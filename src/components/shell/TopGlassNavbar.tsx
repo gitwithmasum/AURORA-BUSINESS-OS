@@ -153,12 +153,12 @@ export function TopGlassNavbar() {
       <header className="sticky top-4 z-30 mb-5">
         <div className="aurora-glass flex flex-wrap items-center justify-between gap-2.5 rounded-[24px] px-3 py-2.5 sm:px-4">
           {/* Left: Mobile Menu + Global Search Capsule */}
-          <div className="flex flex-1 items-center gap-2.5 min-w-[200px]">
+          <div className="flex min-w-0 flex-1 basis-[220px] items-center gap-2">
             <GlassButton
               variant="capsule"
               size="icon"
               aria-label="Open navigation menu"
-              className="lg:hidden"
+              className="h-9 w-9 shrink-0 lg:hidden"
               onClick={() => setMobileDrawerOpen(true)}
             >
               <Menu className="h-4 w-4" />
@@ -167,24 +167,27 @@ export function TopGlassNavbar() {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="aurora-capsule flex h-10 w-full max-w-md cursor-pointer items-center justify-between gap-3 px-4 text-left text-[13px] font-semibold text-[var(--aurora-text)] transition-all hover:border-[var(--aurora-glass-border-strong)] hover:text-[var(--aurora-text-strong)]"
+              className="aurora-capsule flex h-10 min-w-0 flex-1 max-w-md cursor-pointer items-center justify-between gap-2 overflow-hidden px-3.5 text-left text-[13px] font-semibold text-[var(--aurora-text)] transition-all hover:border-[var(--aurora-glass-border-strong)] hover:text-[var(--aurora-text-strong)]"
             >
-              <span className="flex items-center gap-2 truncate">
+              <span className="flex min-w-0 flex-1 items-center gap-2">
                 <Search className="h-3.5 w-3.5 shrink-0 text-[var(--aurora-accent)]" />
-                <span className="truncate">
+                <span className="min-w-0 truncate">
                   {language === "bn"
                     ? "পণ্য, কাস্টমার, সাপ্লায়ার বা মডিউল খুঁজুন..."
                     : "Search products, customers, suppliers, modules..."}
                 </span>
               </span>
-              <kbd className="system-code hidden rounded-md border border-[var(--aurora-glass-border)] px-1.5 py-0.5 text-[11px] font-semibold sm:inline-block">
+              <kbd className="system-code hidden shrink-0 rounded-md border border-[var(--aurora-glass-border)] px-1.5 py-0.5 text-[11px] font-semibold md:inline-block">
                 Ctrl K
               </kbd>
             </button>
           </div>
 
           {/* Right: Capsule Controls */}
-          <div ref={controlsRef} className="flex flex-wrap items-center gap-2">
+          <div
+            ref={controlsRef}
+            className="ml-auto flex w-full max-w-full shrink-0 flex-wrap items-center justify-end gap-1.5 sm:w-auto sm:gap-2"
+          >
             {/* Workspace Selector Capsule (Desktop) */}
             <WorkspaceSwitcher variant="navbar" />
 
@@ -347,7 +350,7 @@ export function TopGlassNavbar() {
               </GlassButton>
 
               {notifOpen && (
-                <div className="aurora-glass-elevated absolute right-0 mt-2 w-80 rounded-[22px] p-3 z-40">
+                <div className="aurora-glass-elevated absolute right-0 mt-2 w-[min(20rem,calc(100vw-2rem))] rounded-[22px] p-3 z-40">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="text-xs font-semibold text-[var(--aurora-text-strong)]">
                       Notification Center
