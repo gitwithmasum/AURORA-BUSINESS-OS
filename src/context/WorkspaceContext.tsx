@@ -7,13 +7,15 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import { ALL_NAV_ITEMS } from "@/config/navigation";
+import { ALL_NAV_ITEMS, NAVIGATION_GROUPS } from "@/config/navigation";
 import {
   createDefaultSidebarPreferences,
   LOCKED_NAV_IDS,
-  moveNavOrder,
+  moveNavItemWithinGroup,
   normalizeSidebarPreferences,
+  resolveGroupedNavItems,
   resolveOrderedNavItems,
+  type OrderedNavGroup,
   type SidebarFontWeight,
   type SidebarLayoutMode,
   type SidebarPreferences,
@@ -64,6 +66,8 @@ interface WorkspaceContextValue {
   sidebarPrefs: SidebarPreferences;
   orderedNavItems: NavItem[];
   visibleNavItems: NavItem[];
+  allNavGroups: OrderedNavGroup[];
+  visibleNavGroups: OrderedNavGroup[];
   setSidebarLayoutMode: (mode: SidebarLayoutMode) => void;
   setSidebarFontWeight: (weight: SidebarFontWeight) => void;
   moveSidebarNavItem: (id: string, direction: -1 | 1) => void;
@@ -148,7 +152,12 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const moveSidebarNavItem = (id: string, direction: -1 | 1) =>
     persistSidebarPrefs((prev) => ({
       ...prev,
-      itemOrder: moveNavOrder(prev.itemOrder, id, direction),
+      itemOrder: moveNavItemWithinGroup(
+        prev.itemOrder,
+        NAVIGATION_GROUPS,
+        id,
+        direction
+      ),
     }));
 
   const toggleSidebarNavVisibility = (id: string) => {
@@ -170,6 +179,12 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       [sidebarPrefs]
     );
 
+  const { allGrouped: allNavGroups, visibleGrouped: visibleNavGroups } =
+    useMemo(
+      () => resolveGroupedNavItems(NAVIGATION_GROUPS, sidebarPrefs),
+      [sidebarPrefs]
+    );
+
   const activeWorkspace =
     DEMO_WORKSPACES.find((w) => w.id === activeId) ?? DEMO_WORKSPACES[0];
 
@@ -187,6 +202,8 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         sidebarPrefs,
         orderedNavItems,
         visibleNavItems,
+        allNavGroups,
+        visibleNavGroups,
         setSidebarLayoutMode,
         setSidebarFontWeight,
         moveSidebarNavItem,

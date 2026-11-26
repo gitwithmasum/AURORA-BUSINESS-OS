@@ -11,6 +11,7 @@ import {
   Boxes,
   Building2,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ClipboardCheck,
@@ -75,10 +76,22 @@ function SidebarContent({
   const {
     toggleSidebar,
     sidebarPrefs,
-    visibleNavItems,
+    visibleNavGroups,
     setSidebarLayoutMode,
   } = useWorkspace();
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
+  const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({
+    command: true,
+    catalog: true,
+    commerce: true,
+    supply: true,
+    finance: true,
+    intelligence: true,
+  });
+
+  const toggleGroup = (id: string) => {
+    setOpenGroups((prev) => ({ ...prev, [id]: !(prev[id] ?? true) }));
+  };
 
   const displayName = user ? profile?.fullName || user.email || "User" : "Masum Billah";
   const initials = displayName
@@ -188,107 +201,126 @@ function SidebarContent({
         />
       </div>
 
-      {/* Scrollable Navigation (Template 03 Pods / Template 04 Bento Grid) */}
+      {/* Scrollable Navigation (Template 03 Pods / Template 04 Bento Grid + Numbered Groups) */}
       <nav
         aria-label="Primary sidebar navigation"
-        className="flex-1 overflow-y-auto px-2.5 py-1"
+        className="flex-1 space-y-3 overflow-y-auto px-2.5 py-1"
       >
-        {!collapsed && (
-          <div className="system-code mb-1.5 flex items-center justify-between px-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--aurora-accent)]">
-            <span>{isBento ? "MODULES // BENTO GRID" : "NAVIGATION // PODS"}</span>
-            <span className="text-[var(--aurora-text-muted)]">
-              {visibleNavItems.length}
-            </span>
-          </div>
-        )}
+        {visibleNavGroups.map((group) => {
+          const isOpen = openGroups[group.id] ?? true;
 
-        <div
-          className={cn(
-            isBento ? "grid grid-cols-2 gap-1.5" : "space-y-1.5"
-          )}
-        >
-          {visibleNavItems.map((item) => {
-            const Icon = ICON_MAP[item.iconName] ?? LayoutDashboard;
-            const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
+          return (
+            <div key={group.id} className="space-y-1.5">
+              {!collapsed && (
+                <button
+                  type="button"
+                  onClick={() => toggleGroup(group.id)}
+                  className="system-code flex w-full cursor-pointer items-center justify-between border-b border-[var(--aurora-glass-border)] px-2 pb-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--aurora-accent)] transition-colors hover:text-[var(--aurora-text-strong)]"
+                >
+                  <span>
+                    {group.indexCode} {"//"} {language === "bn" ? group.labelBn : group.label}
+                  </span>
+                  <ChevronDown
+                    className={cn(
+                      "h-3 w-3 text-[var(--aurora-text-muted)] transition-transform duration-200",
+                      !isOpen && "-rotate-90"
+                    )}
+                  />
+                </button>
+              )}
 
-            return (
-              <div key={item.id} className="group relative">
-                <Link
-                  href={item.href}
-                  onClick={onNavigate}
+              {(collapsed || isOpen) && (
+                <div
                   className={cn(
-                    "relative flex border transition-all duration-150",
-                    weightClass,
-                    collapsed
-                      ? "items-center justify-center rounded-[16px] border-transparent px-0 py-2.5"
-                      : isBento
-                        ? "h-full flex-col items-start gap-2 rounded-[16px] p-2.5 text-[12.5px] leading-tight"
-                        : "items-center gap-2.5 rounded-[16px] px-2.5 py-1.5 text-[13.5px]",
-                    isActive
-                      ? "border-[color-mix(in_srgb,var(--aurora-accent)_50%,transparent)] bg-[color-mix(in_srgb,var(--aurora-accent)_16%,transparent)] text-[var(--aurora-text-strong)] shadow-[0_0_20px_-6px_var(--aurora-glow)]"
-                      : collapsed
-                        ? "text-[var(--aurora-text-muted)] hover:bg-[var(--aurora-glass-bg-subtle)] hover:text-[var(--aurora-text-strong)]"
-                        : "border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] text-[var(--aurora-text)] hover:border-[var(--aurora-glass-border-strong)] hover:bg-[var(--aurora-glass-bg)] hover:text-[var(--aurora-text-strong)]"
+                    isBento ? "grid grid-cols-2 gap-1.5" : "space-y-1.5"
                   )}
                 >
-                  {isActive && (
-                    <motion.span
-                      layoutId="aurora-sidebar-active"
-                      transition={{
-                        type: "spring",
-                        stiffness: 360,
-                        damping: 30,
-                      }}
-                      className="aurora-active-glow pointer-events-none absolute inset-0 rounded-[16px]"
-                    />
-                  )}
+                  {group.items.map((item) => {
+                    const Icon = ICON_MAP[item.iconName] ?? LayoutDashboard;
+                    const isActive =
+                      item.href === "/"
+                        ? pathname === "/"
+                        : pathname.startsWith(item.href);
 
-                  <span
-                    className={cn(
-                      "relative z-10 flex shrink-0 items-center justify-center transition-all duration-150",
-                      collapsed
-                        ? "h-7 w-7"
-                        : "h-7 w-7 rounded-[10px] border",
-                      !collapsed &&
-                        (isActive
-                          ? "border-white/40 bg-[var(--aurora-accent)] text-[var(--aurora-accent-contrast)] shadow-[0_0_14px_var(--aurora-glow)]"
-                          : "border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg)] text-[var(--aurora-accent)] group-hover:scale-105")
-                    )}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                  </span>
+                    return (
+                      <div key={item.id} className="group relative">
+                        <Link
+                          href={item.href}
+                          onClick={onNavigate}
+                          className={cn(
+                            "relative flex border transition-all duration-150",
+                            weightClass,
+                            collapsed
+                              ? "items-center justify-center rounded-[16px] border-transparent px-0 py-2.5"
+                              : isBento
+                                ? "h-full flex-col items-start gap-2 rounded-[16px] p-2.5 text-[12.5px] leading-tight"
+                                : "items-center gap-2.5 rounded-[16px] px-2.5 py-1.5 text-[13.5px]",
+                            isActive
+                              ? "border-[color-mix(in_srgb,var(--aurora-accent)_50%,transparent)] bg-[color-mix(in_srgb,var(--aurora-accent)_16%,transparent)] text-[var(--aurora-text-strong)] shadow-[0_0_20px_-6px_var(--aurora-glow)]"
+                              : collapsed
+                                ? "text-[var(--aurora-text-muted)] hover:bg-[var(--aurora-glass-bg-subtle)] hover:text-[var(--aurora-text-strong)]"
+                                : "border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] text-[var(--aurora-text)] hover:border-[var(--aurora-glass-border-strong)] hover:bg-[var(--aurora-glass-bg)] hover:text-[var(--aurora-text-strong)]"
+                          )}
+                        >
+                          {isActive && (
+                            <motion.span
+                              layoutId="aurora-sidebar-active"
+                              transition={{
+                                type: "spring",
+                                stiffness: 360,
+                                damping: 30,
+                              }}
+                              className="aurora-active-glow pointer-events-none absolute inset-0 rounded-[16px]"
+                            />
+                          )}
 
-                  {!collapsed && (
-                    <span
-                      className={cn(
-                        "relative z-10 min-w-0 flex-1",
-                        isBento ? "line-clamp-2" : "truncate"
-                      )}
-                    >
-                      {language === "bn" ? item.labelBn : item.label}
-                    </span>
-                  )}
+                          <span
+                            className={cn(
+                              "relative z-10 flex shrink-0 items-center justify-center transition-all duration-150",
+                              collapsed
+                                ? "h-7 w-7"
+                                : "h-7 w-7 rounded-[10px] border",
+                              !collapsed &&
+                                (isActive
+                                  ? "border-white/40 bg-[var(--aurora-accent)] text-[var(--aurora-accent-contrast)] shadow-[0_0_14px_var(--aurora-glow)]"
+                                  : "border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg)] text-[var(--aurora-accent)] group-hover:scale-105")
+                            )}
+                          >
+                            <Icon className="h-3.5 w-3.5" />
+                          </span>
 
-                  {!collapsed && !isBento && item.badge && (
-                    <span className="system-code relative z-10 flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--aurora-accent)] px-1.5 text-[10px] font-bold text-[var(--aurora-accent-contrast)]">
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
+                          {!collapsed && (
+                            <span
+                              className={cn(
+                                "relative z-10 min-w-0 flex-1",
+                                isBento ? "line-clamp-2" : "truncate"
+                              )}
+                            >
+                              {language === "bn" ? item.labelBn : item.label}
+                            </span>
+                          )}
 
-                {/* Tooltip when collapsed */}
-                {collapsed && (
-                  <div className="pointer-events-none invisible absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap rounded-xl border border-[var(--aurora-glass-border-strong)] bg-[var(--aurora-surface)] px-2.5 py-1.5 text-xs font-bold text-[var(--aurora-text-strong)] opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:opacity-100">
-                    {language === "bn" ? item.labelBn : item.label}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                          {!collapsed && !isBento && item.badge && (
+                            <span className="system-code relative z-10 flex h-5 min-w-5 items-center justify-center rounded-full bg-[var(--aurora-accent)] px-1.5 text-[10px] font-bold text-[var(--aurora-accent-contrast)]">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+
+                        {/* Tooltip when collapsed */}
+                        {collapsed && (
+                          <div className="pointer-events-none invisible absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap rounded-xl border border-[var(--aurora-glass-border-strong)] bg-[var(--aurora-surface)] px-2.5 py-1.5 text-xs font-bold text-[var(--aurora-text-strong)] opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:opacity-100">
+                            {language === "bn" ? item.labelBn : item.label}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </nav>
 
       <CustomizeSidebarDialog
