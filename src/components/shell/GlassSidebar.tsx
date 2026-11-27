@@ -13,7 +13,6 @@ import {
   Check,
   ChevronDown,
   ChevronLeft,
-  ChevronRight,
   ClipboardCheck,
   FileSpreadsheet,
   Landmark,
@@ -108,39 +107,53 @@ function SidebarContent({
   const weightClass =
     sidebarPrefs.fontWeight === "800" ? "font-extrabold" : "font-bold";
 
+  const handleBrandClick = () => {
+    if (onNavigate) {
+      onNavigate();
+    } else {
+      toggleSidebar();
+    }
+  };
+
   return (
     <div className="flex h-full flex-col">
       {/* Brand Header */}
-      <div className="flex items-center justify-between gap-2 px-3.5 pt-3.5 pb-2">
-        <Link
-          href="/"
-          onClick={onNavigate}
+      <div
+        className={cn(
+          "flex items-center justify-between gap-2 px-3.5 pt-4",
+          collapsed ? "pb-4" : "pb-3.5"
+        )}
+      >
+        <button
+          type="button"
+          onClick={handleBrandClick}
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           className={cn(
-            "group flex items-center gap-2.5 overflow-hidden transition-all",
-            collapsed && "justify-center"
+            "group flex cursor-pointer items-center gap-2.5 overflow-hidden text-left transition-all focus:outline-none",
+            collapsed ? "w-full justify-center" : "min-w-0 flex-1"
           )}
         >
           <AuroraLogoMark />
           {!collapsed && <AuroraBrandTitle compact />}
-        </Link>
-
-        <button
-          type="button"
-          onClick={toggleSidebar}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="hidden h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] text-[var(--aurora-text-muted)] transition-all hover:border-amber-300/40 hover:text-[var(--aurora-accent)] hover:shadow-[0_0_10px_rgba(245,186,75,0.2)] lg:flex"
-        >
-          {collapsed ? (
-            <ChevronRight className="h-3.5 w-3.5" />
-          ) : (
-            <ChevronLeft className="h-3.5 w-3.5" />
-          )}
         </button>
+
+        {!collapsed && (
+          <button
+            type="button"
+            onClick={toggleSidebar}
+            aria-label="Collapse sidebar"
+            title="Collapse sidebar"
+            className="hidden h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] text-[var(--aurora-text-muted)] transition-all hover:border-amber-300/40 hover:text-[var(--aurora-accent)] hover:shadow-[0_0_10px_rgba(245,186,75,0.2)] lg:flex"
+          >
+            <ChevronLeft className="h-3.5 w-3.5" />
+          </button>
+        )}
       </div>
 
       {/* Futuristic Segmented Toggle Pill + Customize Trigger (Sidebar Only) */}
       {!collapsed && (
-        <div className="px-3 pb-2.5">
+        <div className="px-3 pt-2 pb-3">
           <div className="aurora-glass-subtle flex items-center gap-1.5 rounded-2xl p-1.5">
             <div
               role="group"
