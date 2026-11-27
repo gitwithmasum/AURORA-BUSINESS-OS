@@ -624,7 +624,7 @@ export function ExecutiveDashboard() {
       />
 
       {/* Interactive Filter Toolbar */}
-      <GlassCard padding="sm">
+      <GlassCard padding="sm" overflow="visible" className="relative z-20 overflow-visible">
         <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="mr-1 inline-flex items-center gap-1.5 text-xs font-medium text-[var(--aurora-text-muted)]">
@@ -694,7 +694,7 @@ export function ExecutiveDashboard() {
       </GlassCard>
 
       {/* Modular Widgets Rendered in User Order */}
-      <div className="space-y-5">
+      <div className="relative z-10 space-y-5">
         {widgets.map((widget) => renderWidget(widget))}
       </div>
 

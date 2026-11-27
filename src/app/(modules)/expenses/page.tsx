@@ -327,7 +327,7 @@ function ExpensesWorkspace() {
         <KpiCard label="Pending Approval" value={String(pendingCount)} />
       </div>
 
-      <GlassCard>
+      <GlassCard overflow="visible" className="relative z-20 overflow-visible">
         <DataTable
           columns={columns}
           data={filtered}

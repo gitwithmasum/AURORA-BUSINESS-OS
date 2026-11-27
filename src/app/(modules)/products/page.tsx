@@ -404,7 +404,7 @@ function ProductsWorkspace() {
         }
       />
 
-      <GlassCard>
+      <GlassCard overflow="visible" className="relative z-20 overflow-visible">
         <DataTable
           columns={columns}
           data={filtered}

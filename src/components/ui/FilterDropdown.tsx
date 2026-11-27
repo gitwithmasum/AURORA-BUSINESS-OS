@@ -77,7 +77,7 @@ export function FilterDropdown<T extends string = string>({
       {open && (
         <div
           role="listbox"
-          className="aurora-glass-elevated absolute right-0 z-40 mt-2 min-w-[210px] rounded-[20px] p-1.5"
+          className="aurora-glass-elevated absolute right-0 z-50 mt-2 min-w-[210px] max-w-[calc(100vw-2rem)] rounded-[20px] p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_20px_rgba(245,186,75,0.15)] border border-[color-mix(in_srgb,var(--aurora-accent)_35%,transparent)] backdrop-blur-2xl animate-in fade-in zoom-in-95"
         >
           {options.map((opt) => {
             const selected = opt.value === value;

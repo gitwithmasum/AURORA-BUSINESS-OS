@@ -479,7 +479,7 @@ function SuppliersWorkspace() {
         }
       />
 
-      <GlassCard padding="sm">
+      <GlassCard padding="sm" overflow="visible" className="relative z-20 overflow-visible">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="w-full sm:max-w-sm">
             <SearchInput

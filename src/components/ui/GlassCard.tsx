@@ -7,6 +7,7 @@ export interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "elevated" | "subtle";
   interactive?: boolean;
   padding?: "none" | "sm" | "md" | "lg";
+  overflow?: "hidden" | "visible";
 }
 
 const paddingMap = {
@@ -27,13 +28,19 @@ export function GlassCard({
   variant = "default",
   interactive = false,
   padding = "md",
+  overflow,
   children,
   ...props
 }: GlassCardProps) {
+  const isOverflowVisible =
+    overflow === "visible" ||
+    (typeof className === "string" && className.includes("overflow-visible"));
+
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[22px] transition-all duration-200",
+        "relative rounded-[22px] transition-all duration-200",
+        isOverflowVisible ? "overflow-visible" : "overflow-hidden",
         variantMap[variant],
         paddingMap[padding],
         interactive &&
