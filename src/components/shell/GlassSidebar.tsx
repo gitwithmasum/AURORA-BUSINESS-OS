@@ -234,8 +234,8 @@ function SidebarContent({
       {/* Brand Header */}
       <div
         className={cn(
-          "flex items-center justify-between gap-2 px-3.5 pt-4",
-          collapsed ? "pb-4" : "pb-3.5"
+          "flex items-center justify-between gap-2 px-3.5",
+          collapsed ? "pb-2 pt-3" : "pb-3.5 pt-4"
         )}
       >
         <button
@@ -324,7 +324,7 @@ function SidebarContent({
         className={cn(
           "flex-1 space-y-3 overflow-y-auto overflow-x-hidden px-2.5 py-1",
           collapsed
-            ? "space-y-1 px-1.5 pb-2 no-scrollbar"
+            ? "space-y-0.5 px-1.5 pb-2 no-scrollbar"
             : "aurora-scrollbar-thin pb-4"
         )}
       >
@@ -332,7 +332,7 @@ function SidebarContent({
           const isOpen = openGroups[group.id] ?? true;
 
           return (
-            <div key={group.id} className="space-y-1.5">
+            <div key={group.id} className={collapsed ? "space-y-0.5" : "space-y-1.5"}>
               {!collapsed && (
                 <button
                   type="button"
@@ -354,7 +354,7 @@ function SidebarContent({
               {(collapsed || isOpen) && (
                 <div
                   className={cn(
-                    isBento ? "grid grid-cols-2 gap-1.5" : "space-y-1.5"
+                    isBento ? "grid grid-cols-2 gap-1.5" : collapsed ? "space-y-0.5" : "space-y-1.5"
                   )}
                 >
                   {group.items.map((item) => {
@@ -398,7 +398,7 @@ function SidebarContent({
                             "relative flex border transition-all duration-150",
                             weightClass,
                             collapsed
-                              ? "h-9 w-9 mx-auto items-center justify-center rounded-[12px] border-transparent p-0"
+                              ? "h-8.5 w-8.5 mx-auto items-center justify-center rounded-[10px] border-transparent p-0"
                               : isBento
                                 ? "h-full flex-col items-start gap-2 rounded-[16px] p-2.5 text-[12.5px] leading-tight"
                                 : "items-center gap-2.5 rounded-[16px] px-2.5 py-1.5 text-[13.5px]",
@@ -470,11 +470,11 @@ function SidebarContent({
       />
 
       {/* Bottom Profile & Notification Indicator */}
-      <div className="border-t border-[var(--aurora-glass-border)] p-3">
+      <div className={cn("border-t border-[var(--aurora-glass-border)]", collapsed ? "p-2" : "p-3")}>
         <div
           className={cn(
             "aurora-glass-subtle flex items-center gap-2.5 rounded-[18px] p-2.5",
-            collapsed && "justify-center p-2"
+            collapsed && "justify-center p-1.5"
           )}
         >
           <div className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--aurora-surface-2)] text-xs font-bold text-[var(--aurora-text-strong)]">
