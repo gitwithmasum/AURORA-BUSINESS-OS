@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -61,6 +62,105 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Settings,
 };
 
+interface ModuleLiveBloom {
+  tag: string;
+  metric: string;
+  metricBn: string;
+}
+
+const MODULE_LIVE_BLOOM: Record<string, ModuleLiveBloom> = {
+  overview: {
+    tag: "01 // CORE",
+    metric: "৳1,42,500 Today · Healthy",
+    metricBn: "৳১,৪২,৫০০ আজকের বিক্রয়",
+  },
+  analytics: {
+    tag: "01 // METRICS",
+    metric: "+18.4% MoM · Real-time AI",
+    metricBn: "+১৮.৪% মাসিক বৃদ্ধি",
+  },
+  inventory: {
+    tag: "02 // STOCK",
+    metric: "48 Fragrances · 94% In-Stock",
+    metricBn: "৪৮ সুগন্ধি · ৯৪% মজুদ",
+  },
+  products: {
+    tag: "02 // CATALOG",
+    metric: "Luxury EDP, Oud & Attar",
+    metricBn: "লাক্সারি EDP, উদ ও আতর",
+  },
+  "categories-brands": {
+    tag: "02 // BRANDS",
+    metric: "12 Niche Houses Active",
+    metricBn: "১২টি নিশ পারফিউম ব্র্যান্ড",
+  },
+  sales: {
+    tag: "03 // COMMERCE",
+    metric: "24 Sales Today · Verified",
+    metricBn: "২৪টি বিক্রয় সম্পন্ন",
+  },
+  orders: {
+    tag: "03 // ORDERS",
+    metric: "8 In Transit · 3 Pending",
+    metricBn: "৮টি ডেলিভারিতে · ৩টি প্রস্তুত",
+  },
+  customers: {
+    tag: "03 // CRM",
+    metric: "1,420 Verified Profiles",
+    metricBn: "১,৪২০ জন রেজিস্টার্ড ভিআইপি",
+  },
+  suppliers: {
+    tag: "04 // SUPPLY",
+    metric: "Riyadh & Jeddah Tier-1",
+    metricBn: "রিয়াদ ও জেদ্দা পার্টনার",
+  },
+  purchases: {
+    tag: "04 // PO",
+    metric: "PO #108 Approved",
+    metricBn: "PO #১০৮ অনুমোদিত",
+  },
+  "import-management": {
+    tag: "04 // KSA→BD",
+    metric: "SAR ⇄ BDT Duty Engine",
+    metricBn: "রিয়াল ⇄ টাকা ডিউটি ক্যালকুলেশন",
+  },
+  "shipping-logistics": {
+    tag: "04 // FREIGHT",
+    metric: "Air Cargo Hub Dhaka",
+    metricBn: "এয়ার কার্গো ট্র্যাকিং সক্রিয়",
+  },
+  finance: {
+    tag: "05 // TREASURY",
+    metric: "Cash / Bank / MFS Synced",
+    metricBn: "ক্যাশ ও ব্যাংক লেজার প্রস্তুত",
+  },
+  expenses: {
+    tag: "05 // LEDGER",
+    metric: "Daily Operating & Freight",
+    metricBn: "দৈনিক অপারেশন ও ফ্রেইট হিসাব",
+  },
+  "marketing-ads": {
+    tag: "05 // ADS",
+    metric: "4.8x ROAS Campaign",
+    metricBn: "৪.৮ গুণ বিজ্ঞাপন রিটার্ন",
+  },
+  reports: {
+    tag: "05 // AUDIT",
+    metric: "12 Statements Audit-Ready",
+    metricBn: "১২টি ব্যবসায়িক স্টেটমেন্ট রেডি",
+  },
+  "ai-assistant": {
+    tag: "06 // INTELLIGENCE",
+    metric: "Grounded Fragrance LLM",
+    metricBn: "বিজনেস অ্যানালিটিক্স সহকারী",
+  },
+  settings: {
+    tag: "06 // SYSTEM",
+    metric: "RBAC Security & RLS Live",
+    metricBn: "মাল্টি-টেন্যান্ট সিকিউরিটি অন",
+  },
+};
+
 function SidebarContent({
   collapsed,
   onNavigate,
@@ -77,6 +177,20 @@ function SidebarContent({
     visibleNavGroups,
     setSidebarLayoutMode,
   } = useWorkspace();
+  const [mounted, setMounted] = React.useState(false);
+  const [activeHoverBloom, setActiveHoverBloom] = React.useState<{
+    id: string;
+    label: string;
+    labelBn: string;
+    href: string;
+    top: number;
+    left: number;
+    telemetry: ModuleLiveBloom;
+  } | null>(null);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   const [customizeOpen, setCustomizeOpen] = React.useState(false);
   const [openGroups, setOpenGroups] = React.useState<Record<string, boolean>>({
     command: true,
@@ -207,7 +321,10 @@ function SidebarContent({
       {/* Scrollable Navigation (Template 03 Pods / Template 04 Bento Grid + Numbered Groups) */}
       <nav
         aria-label="Primary sidebar navigation"
-        className="flex-1 space-y-3 overflow-y-auto px-2.5 py-1"
+        className={cn(
+          "flex-1 space-y-3 overflow-y-auto overflow-x-hidden px-2.5 py-1 no-scrollbar",
+          collapsed && "space-y-2 px-1.5"
+        )}
       >
         {visibleNavGroups.map((group) => {
           const isOpen = openGroups[group.id] ?? true;
@@ -244,24 +361,49 @@ function SidebarContent({
                       item.href === "/"
                         ? pathname === "/"
                         : pathname.startsWith(item.href);
+                    const telemetry =
+                      MODULE_LIVE_BLOOM[item.id] ?? {
+                        tag: group.indexCode ? `${group.indexCode} // MODULE` : "01 // MODULE",
+                        metric: "Active Subsystem",
+                        metricBn: "সক্রিয় সাবসিস্টেম",
+                      };
 
                     return (
                       <div key={item.id} className="group relative">
                         <Link
                           href={item.href}
-                          onClick={onNavigate}
+                          onClick={() => {
+                            setActiveHoverBloom(null);
+                            onNavigate?.();
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!collapsed) return;
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            setActiveHoverBloom({
+                              id: item.id,
+                              label: item.label,
+                              labelBn: item.labelBn,
+                              href: item.href,
+                              top: rect.top + rect.height / 2,
+                              left: rect.right + 12,
+                              telemetry,
+                            });
+                          }}
+                          onMouseLeave={() => {
+                            setActiveHoverBloom(null);
+                          }}
                           className={cn(
                             "relative flex border transition-all duration-150",
                             weightClass,
                             collapsed
-                              ? "items-center justify-center rounded-[16px] border-transparent px-0 py-2.5"
+                              ? "h-10 w-10 mx-auto items-center justify-center rounded-[14px] border-transparent p-0"
                               : isBento
                                 ? "h-full flex-col items-start gap-2 rounded-[16px] p-2.5 text-[12.5px] leading-tight"
                                 : "items-center gap-2.5 rounded-[16px] px-2.5 py-1.5 text-[13.5px]",
                             isActive
                               ? "border-[color-mix(in_srgb,var(--aurora-accent)_50%,transparent)] bg-[color-mix(in_srgb,var(--aurora-accent)_16%,transparent)] text-[var(--aurora-text-strong)] shadow-[0_0_20px_-6px_var(--aurora-glow)]"
                               : collapsed
-                                ? "text-[var(--aurora-text-muted)] hover:bg-[var(--aurora-glass-bg-subtle)] hover:text-[var(--aurora-text-strong)]"
+                                ? "text-[var(--aurora-text-muted)] hover:border-[var(--aurora-glass-border-strong)] hover:bg-[var(--aurora-glass-bg)] hover:text-[var(--aurora-text-strong)] hover:shadow-[0_0_12px_rgba(245,186,75,0.14)]"
                                 : "border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] text-[var(--aurora-text)] hover:border-[var(--aurora-glass-border-strong)] hover:bg-[var(--aurora-glass-bg)] hover:text-[var(--aurora-text-strong)]"
                           )}
                         >
@@ -281,7 +423,7 @@ function SidebarContent({
                             className={cn(
                               "relative z-10 flex shrink-0 items-center justify-center transition-all duration-150",
                               collapsed
-                                ? "h-7 w-7"
+                                ? "h-6 w-6"
                                 : "h-7 w-7 rounded-[10px] border",
                               !collapsed &&
                                 (isActive
@@ -289,7 +431,7 @@ function SidebarContent({
                                   : "border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg)] text-[var(--aurora-accent)] group-hover:scale-105")
                             )}
                           >
-                            <Icon className="h-3.5 w-3.5" />
+                            <Icon className={collapsed ? "h-4 w-4" : "h-3.5 w-3.5"} />
                           </span>
 
                           {!collapsed && (
@@ -309,13 +451,6 @@ function SidebarContent({
                             </span>
                           )}
                         </Link>
-
-                        {/* Tooltip when collapsed */}
-                        {collapsed && (
-                          <div className="pointer-events-none invisible absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap rounded-xl border border-[var(--aurora-glass-border-strong)] bg-[var(--aurora-surface)] px-2.5 py-1.5 text-xs font-bold text-[var(--aurora-text-strong)] opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:opacity-100">
-                            {language === "bn" ? item.labelBn : item.label}
-                          </div>
-                        )}
                       </div>
                     );
                   })}
@@ -371,6 +506,52 @@ function SidebarContent({
           )}
         </div>
       </div>
+
+      {/* Holographic Live Bloom Capsule with Real-time Telemetry (Rendered via Portal to eliminate clipping & scrollbars) */}
+      {collapsed && activeHoverBloom && mounted && typeof document !== "undefined" && createPortal(
+        <div
+          style={{
+            top: `${activeHoverBloom.top}px`,
+            left: `${activeHoverBloom.left}px`,
+            transform: "translateY(-50%)",
+          }}
+          className="pointer-events-none fixed z-[9999] w-64 rounded-2xl border border-[color-mix(in_srgb,var(--aurora-accent)_45%,transparent)] bg-[#081022]/95 p-3 text-left shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(245,186,75,0.2)] backdrop-blur-2xl transition-all duration-150 animate-in fade-in zoom-in-95"
+        >
+          {/* Triangular pointer needle pointing back to the hovered icon */}
+          <div className="absolute -left-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rotate-45 border-b border-l border-[color-mix(in_srgb,var(--aurora-accent)_45%,transparent)] bg-[#081022]" />
+
+          {/* System code + Live Pulse Badge */}
+          <div className="relative z-10 flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10">
+            <span className="system-code text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--aurora-accent)]">
+              {activeHoverBloom.telemetry.tag}
+            </span>
+            <span className="inline-flex items-center gap-1 text-[8.5px] font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              LIVE TELEMETRY
+            </span>
+          </div>
+
+          {/* Module Title */}
+          <div className="relative z-10 text-[13px] font-bold text-white tracking-wide">
+            {language === "bn" ? activeHoverBloom.labelBn : activeHoverBloom.label}
+          </div>
+
+          {/* Live Data Metric */}
+          <div className="relative z-10 mt-1.5 flex items-center gap-1.5 text-[10.5px] font-mono text-slate-300">
+            <span className="text-[var(--aurora-accent)] font-bold">↳</span>
+            <span className="truncate">
+              {language === "bn" ? activeHoverBloom.telemetry.metricBn : activeHoverBloom.telemetry.metric}
+            </span>
+          </div>
+
+          {/* Route Hint Footer */}
+          <div className="relative z-10 mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[8.5px] font-mono text-slate-500">
+            <span>ROUTE: {activeHoverBloom.href}</span>
+            <span className="text-[var(--aurora-accent)] font-semibold">CLICK TO OPEN →</span>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
