@@ -111,12 +111,12 @@ function SidebarContent({
   return (
     <div className="flex h-full flex-col">
       {/* Brand Header */}
-      <div className="flex items-center justify-between gap-2 px-3.5 pt-4 pb-2.5">
+      <div className="flex items-center justify-between gap-2 px-3.5 pt-3.5 pb-2">
         <Link
           href="/"
           onClick={onNavigate}
           className={cn(
-            "flex items-center gap-3 overflow-hidden",
+            "group flex items-center gap-2.5 overflow-hidden transition-all",
             collapsed && "justify-center"
           )}
         >
@@ -128,12 +128,12 @@ function SidebarContent({
           type="button"
           onClick={toggleSidebar}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="hidden h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] text-[var(--aurora-text-muted)] transition-colors hover:border-[var(--aurora-glass-border-strong)] hover:text-[var(--aurora-text-strong)] lg:flex"
+          className="hidden h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] text-[var(--aurora-text-muted)] transition-all hover:border-amber-300/40 hover:text-[var(--aurora-accent)] hover:shadow-[0_0_10px_rgba(245,186,75,0.2)] lg:flex"
         >
           {collapsed ? (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-3.5 w-3.5" />
           ) : (
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-3.5 w-3.5" />
           )}
         </button>
       </div>

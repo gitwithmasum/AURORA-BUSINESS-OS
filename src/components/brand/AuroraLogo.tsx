@@ -15,9 +15,9 @@ export function AuroraLogoMark({
   return (
     <div
       className={cn(
-        "relative flex shrink-0 items-center justify-center overflow-hidden",
+        "relative flex shrink-0 items-center justify-center overflow-hidden transition-all duration-300",
         !bare &&
-          "h-10 w-10 rounded-2xl border border-amber-300/35 bg-gradient-to-br from-[#141c38] via-[#0b1024] to-[#050812] shadow-[0_0_20px_rgba(245,186,75,0.24)]",
+          "h-9 w-9 rounded-xl border border-amber-300/30 bg-gradient-to-br from-[#161f38] via-[#0c1224] to-[#070b18] shadow-[0_0_12px_rgba(245,186,75,0.18)] group-hover:border-amber-300/50 group-hover:shadow-[0_0_18px_rgba(245,186,75,0.32)]",
         className
       )}
     >
@@ -25,7 +25,7 @@ export function AuroraLogoMark({
         viewBox="0 0 64 64"
         fill="none"
         aria-hidden="true"
-        className={cn(bare ? "h-full w-full" : "h-7 w-7")}
+        className={cn(bare ? "h-full w-full" : "h-5 w-5 transition-transform duration-300 group-hover:scale-105")}
       >
         <defs>
           <linearGradient
@@ -110,21 +110,26 @@ export function AuroraBrandTitle({
 }) {
   return (
     <div className={cn("min-w-0 leading-none", className)}>
-      <div
-        className={cn(
-          "font-display truncate font-normal tracking-[0.1em] bg-gradient-to-r from-[#FFF0B8] via-[#F2BE58] to-[#D9912E] [[data-theme='light-glass']_&]:from-[#C27D16] [[data-theme='light-glass']_&]:via-[#9E5F0B] [[data-theme='light-glass']_&]:to-[#754305] bg-clip-text text-transparent drop-shadow-[0_1px_1px_rgba(0,0,0,0.22)]",
-          compact ? "text-[17px]" : "text-[21px]"
-        )}
-      >
-        AURORA
+      <div className="flex items-center gap-1.5">
+        <span
+          className={cn(
+            "font-display truncate font-normal tracking-[0.14em] bg-gradient-to-r from-[#FFF0B8] via-[#F2BE58] to-[#D9912E] [[data-theme='light-glass']_&]:from-[#C27D16] [[data-theme='light-glass']_&]:via-[#9E5F0B] [[data-theme='light-glass']_&]:to-[#754305] bg-clip-text text-transparent drop-shadow-[0_1px_1px_rgba(0,0,0,0.22)]",
+            compact ? "text-[16px]" : "text-[20px]"
+          )}
+        >
+          AURORA
+        </span>
+        <span className="system-code inline-flex items-center rounded border border-amber-400/25 bg-amber-400/10 px-1.5 py-0.5 text-[8px] font-bold tracking-widest text-[var(--aurora-accent)] leading-none select-none">
+          OS
+        </span>
       </div>
       <div
         className={cn(
-          "mt-0.5 truncate font-semibold uppercase tracking-[0.22em] text-[var(--aurora-text-strong)]",
-          compact ? "text-[10px]" : "text-[11px]"
+          "mt-0.5 truncate font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[var(--aurora-text-muted)]",
+          compact ? "text-[9px]" : "text-[10px]"
         )}
       >
-        BUSINESS OS
+        BUSINESS SYSTEM
       </div>
     </div>
   );
