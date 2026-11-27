@@ -110,7 +110,7 @@ export function WorkspaceSwitcher({
           aria-label="Active workspace"
           value={activeId}
           onChange={(e) => handleSelectChange(e.target.value)}
-          className="max-w-[130px] cursor-pointer truncate bg-transparent text-xs font-semibold text-[var(--aurora-text-strong)] focus:outline-none sm:max-w-none sm:text-[13px]"
+          className="max-w-[110px] cursor-pointer truncate bg-transparent text-xs font-semibold text-[var(--aurora-text-strong)] focus:outline-none sm:max-w-[140px] md:max-w-[170px] xl:max-w-none sm:text-[13px]"
         >
           {options.map((opt) => (
             <option

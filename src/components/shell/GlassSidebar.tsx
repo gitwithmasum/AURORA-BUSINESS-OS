@@ -322,8 +322,10 @@ function SidebarContent({
       <nav
         aria-label="Primary sidebar navigation"
         className={cn(
-          "flex-1 space-y-3 overflow-y-auto overflow-x-hidden px-2.5 py-1 no-scrollbar",
-          collapsed && "space-y-2 px-1.5"
+          "flex-1 space-y-3 overflow-y-auto overflow-x-hidden px-2.5 py-1",
+          collapsed
+            ? "space-y-1 px-1.5 pb-2 no-scrollbar"
+            : "aurora-scrollbar-thin pb-4"
         )}
       >
         {visibleNavGroups.map((group) => {
@@ -396,7 +398,7 @@ function SidebarContent({
                             "relative flex border transition-all duration-150",
                             weightClass,
                             collapsed
-                              ? "h-10 w-10 mx-auto items-center justify-center rounded-[14px] border-transparent p-0"
+                              ? "h-9 w-9 mx-auto items-center justify-center rounded-[12px] border-transparent p-0"
                               : isBento
                                 ? "h-full flex-col items-start gap-2 rounded-[16px] p-2.5 text-[12.5px] leading-tight"
                                 : "items-center gap-2.5 rounded-[16px] px-2.5 py-1.5 text-[13.5px]",
@@ -423,7 +425,7 @@ function SidebarContent({
                             className={cn(
                               "relative z-10 flex shrink-0 items-center justify-center transition-all duration-150",
                               collapsed
-                                ? "h-6 w-6"
+                                ? "h-5 w-5"
                                 : "h-7 w-7 rounded-[10px] border",
                               !collapsed &&
                                 (isActive
@@ -431,7 +433,7 @@ function SidebarContent({
                                   : "border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg)] text-[var(--aurora-accent)] group-hover:scale-105")
                             )}
                           >
-                            <Icon className={collapsed ? "h-4 w-4" : "h-3.5 w-3.5"} />
+                            <Icon className={collapsed ? "h-3.5 w-3.5" : "h-3.5 w-3.5"} />
                           </span>
 
                           {!collapsed && (
@@ -508,50 +510,63 @@ function SidebarContent({
       </div>
 
       {/* Holographic Live Bloom Capsule with Real-time Telemetry (Rendered via Portal to eliminate clipping & scrollbars) */}
-      {collapsed && activeHoverBloom && mounted && typeof document !== "undefined" && createPortal(
-        <div
-          style={{
-            top: `${activeHoverBloom.top}px`,
-            left: `${activeHoverBloom.left}px`,
-            transform: "translateY(-50%)",
-          }}
-          className="pointer-events-none fixed z-[9999] w-64 rounded-2xl border border-[color-mix(in_srgb,var(--aurora-accent)_45%,transparent)] bg-[#081022]/95 p-3 text-left shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(245,186,75,0.2)] backdrop-blur-2xl transition-all duration-150 animate-in fade-in zoom-in-95"
-        >
-          {/* Triangular pointer needle pointing back to the hovered icon */}
-          <div className="absolute -left-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rotate-45 border-b border-l border-[color-mix(in_srgb,var(--aurora-accent)_45%,transparent)] bg-[#081022]" />
+      {collapsed && activeHoverBloom && mounted && typeof document !== "undefined" && (() => {
+        const capsuleHalfHeight = 65;
+        const minCenterY = 78 + capsuleHalfHeight; // ~143px (ensures capsule top stays comfortably below TopGlassNavbar)
+        const maxCenterY = typeof window !== "undefined" ? window.innerHeight - capsuleHalfHeight - 16 : 800;
+        const clampedCenterY = Math.max(minCenterY, Math.min(maxCenterY, activeHoverBloom.top));
+        const needleOffsetY = Math.max(-capsuleHalfHeight + 14, Math.min(capsuleHalfHeight - 14, activeHoverBloom.top - clampedCenterY));
 
-          {/* System code + Live Pulse Badge */}
-          <div className="relative z-10 flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10">
-            <span className="system-code text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--aurora-accent)]">
-              {activeHoverBloom.telemetry.tag}
-            </span>
-            <span className="inline-flex items-center gap-1 text-[8.5px] font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              LIVE TELEMETRY
-            </span>
-          </div>
+        return createPortal(
+          <div
+            style={{
+              top: `${clampedCenterY}px`,
+              left: `${activeHoverBloom.left}px`,
+              transform: "translateY(-50%)",
+            }}
+            className="pointer-events-none fixed z-[9999] w-64 rounded-2xl border border-[color-mix(in_srgb,var(--aurora-accent)_45%,transparent)] bg-[#081022]/95 p-3 text-left shadow-[0_20px_50px_rgba(0,0,0,0.85),0_0_25px_rgba(245,186,75,0.2)] backdrop-blur-2xl transition-all duration-150 animate-in fade-in zoom-in-95"
+          >
+            {/* Triangular pointer needle pointing dynamically to the hovered icon */}
+            <div
+              style={{
+                top: `calc(50% + ${needleOffsetY}px)`,
+              }}
+              className="absolute -left-1.5 h-3 w-3 -translate-y-1/2 rotate-45 border-b border-l border-[color-mix(in_srgb,var(--aurora-accent)_45%,transparent)] bg-[#081022]"
+            />
 
-          {/* Module Title */}
-          <div className="relative z-10 text-[13px] font-bold text-white tracking-wide">
-            {language === "bn" ? activeHoverBloom.labelBn : activeHoverBloom.label}
-          </div>
+            {/* System code + Live Pulse Badge */}
+            <div className="relative z-10 flex items-center justify-between pb-1.5 mb-1.5 border-b border-white/10">
+              <span className="system-code text-[9px] font-bold uppercase tracking-[0.16em] text-[var(--aurora-accent)]">
+                {activeHoverBloom.telemetry.tag}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[8.5px] font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                LIVE TELEMETRY
+              </span>
+            </div>
 
-          {/* Live Data Metric */}
-          <div className="relative z-10 mt-1.5 flex items-center gap-1.5 text-[10.5px] font-mono text-slate-300">
-            <span className="text-[var(--aurora-accent)] font-bold">↳</span>
-            <span className="truncate">
-              {language === "bn" ? activeHoverBloom.telemetry.metricBn : activeHoverBloom.telemetry.metric}
-            </span>
-          </div>
+            {/* Module Title */}
+            <div className="relative z-10 text-[13px] font-bold text-white tracking-wide">
+              {language === "bn" ? activeHoverBloom.labelBn : activeHoverBloom.label}
+            </div>
 
-          {/* Route Hint Footer */}
-          <div className="relative z-10 mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[8.5px] font-mono text-slate-500">
-            <span>ROUTE: {activeHoverBloom.href}</span>
-            <span className="text-[var(--aurora-accent)] font-semibold">CLICK TO OPEN →</span>
-          </div>
-        </div>,
-        document.body
-      )}
+            {/* Live Data Metric */}
+            <div className="relative z-10 mt-1.5 flex items-center gap-1.5 text-[10.5px] font-mono text-slate-300">
+              <span className="text-[var(--aurora-accent)] font-bold">↳</span>
+              <span className="truncate">
+                {language === "bn" ? activeHoverBloom.telemetry.metricBn : activeHoverBloom.telemetry.metric}
+              </span>
+            </div>
+
+            {/* Route Hint Footer */}
+            <div className="relative z-10 mt-2 pt-1.5 border-t border-white/5 flex items-center justify-between text-[8.5px] font-mono text-slate-500">
+              <span>ROUTE: {activeHoverBloom.href}</span>
+              <span className="text-[var(--aurora-accent)] font-semibold">CLICK TO OPEN →</span>
+            </div>
+          </div>,
+          document.body
+        );
+      })()}
     </div>
   );
 }
@@ -569,7 +584,7 @@ export function GlassSidebar() {
           sidebarCollapsed ? "w-[88px]" : "w-[272px]"
         )}
       >
-        <div className="aurora-glass sticky top-4 h-[calc(100vh-2rem)] rounded-[26px]">
+        <div className="aurora-glass sticky top-4 h-[calc(100dvh-2rem)] rounded-[26px]">
           <SidebarContent collapsed={sidebarCollapsed} />
         </div>
       </aside>

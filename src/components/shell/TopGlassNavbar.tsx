@@ -151,9 +151,9 @@ export function TopGlassNavbar() {
   return (
     <>
       <header className="sticky top-4 z-30 mb-5">
-        <div className="aurora-glass flex flex-wrap items-center justify-between gap-2.5 rounded-[24px] px-3 py-2.5 sm:px-4">
-          {/* Left: Mobile Menu + Minimalist Search Icon */}
-          <div className="flex shrink-0 items-center gap-2">
+        <div className="aurora-glass flex flex-nowrap items-center justify-between gap-2 rounded-[24px] px-3 py-2 sm:px-4">
+          {/* Left: Mobile Menu + Compact Search Capsule */}
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <GlassButton
               variant="capsule"
               size="icon"
@@ -164,32 +164,37 @@ export function TopGlassNavbar() {
               <Menu className="h-4 w-4" />
             </GlassButton>
 
-            <GlassButton
-              variant="capsule"
-              size="icon"
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
               aria-label="Open global search (Ctrl+K)"
               title={
                 language === "bn"
                   ? "সার্চ করুন (Ctrl+K)"
                   : "Search (Ctrl+K)"
               }
-              className="h-9 w-9 shrink-0"
-              onClick={() => setSearchOpen(true)}
+              className="group flex h-9 shrink-0 items-center gap-2 rounded-full border border-[var(--aurora-glass-border)] bg-[var(--aurora-glass-bg-subtle)] px-2.5 text-xs text-[var(--aurora-text-muted)] transition-all hover:border-[color-mix(in_srgb,var(--aurora-accent)_40%,transparent)] hover:bg-[var(--aurora-glass-bg)] hover:text-[var(--aurora-text-strong)] sm:px-3"
             >
-              <Search className="h-4 w-4 text-[var(--aurora-accent)]" />
-            </GlassButton>
+              <Search className="h-3.5 w-3.5 text-[var(--aurora-accent)] transition-transform group-hover:scale-110" />
+              <span className="hidden text-[12px] md:inline">
+                {language === "bn" ? "অনুসন্ধান..." : "Search..."}
+              </span>
+              <kbd className="hidden rounded border border-white/10 bg-white/5 px-1.5 py-0.5 font-mono text-[9.5px] text-[var(--aurora-text-muted)] 2xl:inline">
+                Ctrl+K
+              </kbd>
+            </button>
           </div>
 
-          {/* Right: Capsule Controls */}
+          {/* Right: Capsule Controls (flex-nowrap to completely prevent wrapping on zoom) */}
           <div
             ref={controlsRef}
-            className="ml-auto flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1.5 sm:gap-2"
+            className="ml-auto flex min-w-0 flex-nowrap items-center justify-end gap-1.5 sm:gap-2"
           >
             {/* Workspace Selector Capsule */}
             <WorkspaceSwitcher variant="navbar" />
 
-            {/* Live Date & Time Capsule */}
-            <div className="aurora-capsule hidden h-9 items-center gap-1.5 px-3 text-xs text-[var(--aurora-text-muted)] md:flex">
+            {/* Live Date & Time Capsule (visible only on ultra-wide screens to protect navbar space) */}
+            <div className="aurora-capsule hidden h-9 shrink-0 items-center gap-1.5 px-3 text-xs text-[var(--aurora-text-muted)] 2xl:flex">
               <CalendarClock className="h-3.5 w-3.5 text-[var(--aurora-accent)]" />
               <span className="timestamp text-[12px] font-semibold text-[var(--aurora-text-strong)]">
                 {now || "Loading..."}
@@ -197,11 +202,11 @@ export function TopGlassNavbar() {
             </div>
 
             {/* Quick-Create Capsule */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <GlassButton
                 variant="primary"
                 size="sm"
-                className="h-9 rounded-full px-3.5 text-[13px] font-semibold"
+                className="h-9 shrink-0 rounded-full px-2.5 text-[13px] font-semibold sm:px-3.5"
                 onClick={() => {
                   setQuickCreateOpen((v) => !v);
                   setThemeMenuOpen(false);
@@ -209,7 +214,7 @@ export function TopGlassNavbar() {
                 }}
               >
                 <Plus className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Quick Create</span>
+                <span className="hidden xl:inline">Quick Create</span>
               </GlassButton>
 
               {quickCreateOpen && (
@@ -241,7 +246,7 @@ export function TopGlassNavbar() {
             <GlassButton
               variant="capsule"
               size="sm"
-              className="h-9 px-3 text-[13px] font-bold"
+              className="h-9 shrink-0 px-2.5 text-[12px] font-bold sm:px-3 sm:text-[13px]"
               aria-label="Toggle language"
               onClick={() => {
                 const next = language === "en" ? "bn" : "en";
@@ -260,11 +265,12 @@ export function TopGlassNavbar() {
             </GlassButton>
 
             {/* Theme Switcher Capsule */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <GlassButton
                 variant="capsule"
                 size="icon"
                 aria-label="Switch color theme"
+                className="h-9 w-9 shrink-0"
                 onClick={() => {
                   setThemeMenuOpen((v) => !v);
                   setNotifOpen(false);
@@ -331,11 +337,12 @@ export function TopGlassNavbar() {
             </div>
 
             {/* Notification Center Capsule */}
-            <div className="relative">
+            <div className="relative shrink-0">
               <GlassButton
                 variant="capsule"
                 size="icon"
                 aria-label="Open notifications"
+                className="h-9 w-9 shrink-0"
                 onClick={() => {
                   setNotifOpen((v) => !v);
                   setThemeMenuOpen(false);
@@ -433,14 +440,14 @@ export function TopGlassNavbar() {
             {/* User Avatar Capsule */}
             <Link
               href={user ? "/profile" : "/auth/login"}
-              className="aurora-capsule flex h-9 items-center gap-2 pl-1.5 pr-3 transition-all hover:border-[var(--aurora-glass-border-strong)]"
+              className="aurora-capsule flex h-9 shrink-0 items-center gap-2 pl-1.5 pr-2.5 transition-all hover:border-[var(--aurora-glass-border-strong)] sm:pr-3"
             >
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--aurora-accent)] text-[10px] font-bold text-[var(--aurora-accent-contrast)]">
                 {(user ? profile?.fullName || user.email || "U" : "MB")
                   .slice(0, 2)
                   .toUpperCase()}
               </span>
-              <span className="hidden text-[13px] font-semibold text-[var(--aurora-text-strong)] sm:inline">
+              <span className="hidden text-[12.5px] font-semibold text-[var(--aurora-text-strong)] xl:inline">
                 {user ? "Profile" : "Sign In"}
               </span>
             </Link>

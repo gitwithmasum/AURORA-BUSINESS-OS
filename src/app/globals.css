@@ -25,6 +25,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 280ms ease, color 220ms ease;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
 
   h1,
@@ -68,7 +70,9 @@
 /* Ambient Futuristic Mesh Canvas */
 .aurora-canvas {
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  max-width: 100vw;
   background-color: var(--aurora-bg);
   background-image:
     radial-gradient(65% 50% at 12% 8%, var(--aurora-ambient-1) 0%, transparent 72%),
@@ -149,4 +153,24 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Futuristic Ultra-thin Scrollbar for Expanded Sidebar and Glass Panes */
+.aurora-scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.aurora-scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.aurora-scrollbar-thin::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--aurora-accent) 28%, transparent);
+  border-radius: 9999px;
+}
+.aurora-scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: var(--aurora-accent);
+}
+.aurora-scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--aurora-accent) 28%, transparent) transparent;
 }
