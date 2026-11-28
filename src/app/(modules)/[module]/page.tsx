@@ -44,7 +44,7 @@ export default function ModuleRoadmapPage() {
               <GlassBadge tone={isSettings || isCategories ? "success" : "info"}>
                 {isSettings || isCategories
                   ? "Workspace Connected"
-                  : "AURORA BUSINESS OS Module"}
+                  : "Aurora BusinessHub Module"}
               </GlassBadge>
             </div>
             <GlassCardTitle className="text-xl">
@@ -52,7 +52,7 @@ export default function ModuleRoadmapPage() {
             </GlassCardTitle>
             <GlassCardDescription className="max-w-2xl text-sm">
               {navItem?.description ??
-                "This module route is wired into the AURORA BUSINESS OS shell and ready for full domain & database implementation in its designated phase."}
+                "This module route is wired into the Aurora BusinessHub shell and ready for full domain & database implementation in its designated phase."}
             </GlassCardDescription>
           </div>
           <Link href="/">

@@ -70,7 +70,7 @@ export default function LoginPage() {
     });
 
     toast({
-      title: "Signed in to AURORA BUSINESS OS",
+      title: "Signed in to Aurora BusinessHub",
       tone: "success",
     });
 
@@ -92,7 +92,7 @@ export default function LoginPage() {
               </GlassBadge>
             </div>
             <GlassCardTitle className="text-xl">
-              Sign in to AURORA BUSINESS OS
+              Sign in to Aurora BusinessHub
             </GlassCardTitle>
             <GlassCardDescription>
               Access your multi-tenant workspace with organization-isolated RBAC.

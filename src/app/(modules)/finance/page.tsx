@@ -313,7 +313,7 @@ function FinanceWorkspace() {
     exportDocumentPdf({
       title: "PROFIT & LOSS STATEMENT",
       subtitle: `${periodMode.toUpperCase()} (${startDate || "All"} to ${endDate || "Today"})`,
-      businessName: activeOrg?.organizationName ?? "AURORA BUSINESS OS",
+      businessName: activeOrg?.organizationName ?? "Aurora BusinessHub",
       meta: [
         { label: "Gross Margin", value: `${pnl.grossMarginPct}%` },
         { label: "Net Margin", value: `${pnl.netMarginPct}%` },

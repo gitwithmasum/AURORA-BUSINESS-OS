@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "/",
-    name: "AURORA BUSINESS OS",
-    short_name: "AURORA",
+    name: "Aurora BusinessHub",
+    short_name: "BusinessHub",
     description:
       "Glassmorphism Business Management, KSA to Bangladesh Import ERP & AI Analytics Platform.",
     start_url: "/",

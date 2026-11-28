@@ -64,7 +64,7 @@ export function exportDocumentPdf(params: {
   const doc = new jsPDF();
 
   doc.setFontSize(16);
-  doc.text(params.businessName || "AURORA BUSINESS OS", 14, 18);
+  doc.text(params.businessName || "Aurora BusinessHub", 14, 18);
   doc.setFontSize(9);
   doc.setTextColor(100);
   if (params.businessAddress) doc.text(params.businessAddress, 14, 24);

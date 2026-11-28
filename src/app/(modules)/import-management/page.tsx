@@ -287,7 +287,7 @@ function ImportManagementWorkspace() {
     exportDocumentPdf({
       title: "KSA → BD IMPORT COST ESTIMATE",
       subtitle: `${title} (ESTIMATE ONLY)`,
-      businessName: activeOrg?.organizationName ?? "AURORA BUSINESS OS",
+      businessName: activeOrg?.organizationName ?? "Aurora BusinessHub",
       meta: [
         { label: "Exchange Rate", value: `1 ${fxCurrency} = ${exchangeRate} BDT` },
         { label: "Cost Allocation", value: allocationMethod.toUpperCase() },

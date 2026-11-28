@@ -28,7 +28,7 @@ export default function OfflinePage() {
             You are currently offline
           </GlassCardTitle>
           <GlassCardDescription>
-            AURORA BUSINESS OS could not reach the server. Check your internet
+            Aurora BusinessHub could not reach the server. Check your internet
             connection and retry to sync live inventory, sales, and financial data.
           </GlassCardDescription>
         </GlassCardHeader>

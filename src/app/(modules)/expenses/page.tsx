@@ -296,7 +296,7 @@ function ExpensesWorkspace() {
               onClick={() =>
                 exportDocumentPdf({
                   title: "EXPENSE REPORT",
-                  businessName: activeOrg?.organizationName ?? "AURORA BUSINESS OS",
+                  businessName: activeOrg?.organizationName ?? "Aurora BusinessHub",
                   meta: [{ label: "Approved Total", value: formatCurrency(approvedTotal) }],
                   columns: ["Date", "Category", "Vendor", "Amount", "Approval"],
                   rows: filtered.map((e) => [

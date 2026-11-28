@@ -6,8 +6,8 @@ import { formatCategoryLabel } from "../src/lib/utils/format";
 describe("PWA Manifest & Middleware Configuration", () => {
   it("provides a valid standalone manifest with required icon sizes", () => {
     const data = manifest();
-    expect(data.name).toBe("AURORA BUSINESS OS");
-    expect(data.short_name).toBe("AURORA");
+    expect(data.name).toBe("Aurora BusinessHub");
+    expect(data.short_name).toBe("BusinessHub");
     expect(data.display).toBe("standalone");
     expect(data.start_url).toBe("/");
 

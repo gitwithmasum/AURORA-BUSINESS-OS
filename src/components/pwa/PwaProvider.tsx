@@ -99,7 +99,7 @@ export function PwaProvider() {
           <AuroraLogoMark className="h-9 w-9" />
           <div className="min-w-0 flex-1">
             <div className="truncate text-xs font-semibold text-[var(--aurora-text-strong)]">
-              Install AURORA BUSINESS OS
+              Install Aurora BusinessHub
             </div>
             <div className="truncate text-[11px] text-[var(--aurora-text-muted)]">
               Fast desktop & mobile app access

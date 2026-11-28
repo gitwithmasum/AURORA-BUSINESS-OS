@@ -1,18 +1,18 @@
 <div align="center">
 
-<a href="https://aurora-business-os.vercel.app/">
-  <img src="./docs/assets/aurora-banner.jpg" alt="AURORA BUSINESS OS — Command Center Showcase" width="100%" />
+<a href="https://aurora-business-hub.vercel.app/">
+  <img src="./docs/assets/aurora-banner.jpg" alt="Aurora BusinessHub — Command Center Showcase" width="100%" />
 </a>
 
 <br />
 
-# AURORA BUSINESS OS
+# Aurora BusinessHub
 
 **Glassmorphism Multi-Tenant ERP · KSA → Bangladesh Import Engine · AI Business Intelligence**
 
 <p>
-  <a href="https://aurora-business-os.vercel.app/">
-    <img src="https://img.shields.io/badge/LIVE%20PRODUCTION-aurora--business--os.vercel.app-00E5FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Production App" />
+  <a href="https://aurora-business-hub.vercel.app/">
+    <img src="https://img.shields.io/badge/LIVE%20PRODUCTION-aurora--business--hub.vercel.app-00E5FF?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Production App" />
   </a>
   <a href="https://supabase.com/">
     <img src="https://img.shields.io/badge/SUPABASE-POSTGRES%20%2B%20RLS-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" alt="Supabase PostgreSQL + RLS" />
@@ -35,9 +35,9 @@
 </p>
 
 <p>
-  <a href="https://aurora-business-os.vercel.app/"><strong>Launch Live App</strong></a>
+  <a href="https://aurora-business-hub.vercel.app/"><strong>Launch Live App</strong></a>
   &nbsp;·&nbsp;
-  <a href="https://aurora-business-os.vercel.app/auth/register"><strong>Create Workspace</strong></a>
+  <a href="https://aurora-business-hub.vercel.app/auth/register"><strong>Create Workspace</strong></a>
   &nbsp;·&nbsp;
   <a href="./docs/ARCHITECTURE.md"><strong>System Architecture</strong></a>
   &nbsp;·&nbsp;
@@ -52,7 +52,7 @@
 
 ## ⚡ System Identity & Core Capabilities
 
-**AURORA BUSINESS OS** is a production-grade, multi-tenant **Business Operating System** built with **Next.js 15 (App Router)**, **TypeScript**, **Tailwind CSS v4**, and **Supabase PostgreSQL**.
+**Aurora BusinessHub** is a production-grade, multi-tenant **Business Operating System & Commerce Hub** built with **Next.js 15 (App Router)**, **TypeScript**, **Tailwind CSS v4**, and **Supabase PostgreSQL**.
 
 Engineered specifically for **cross-border Luxury Perfume & Fragrance trade (Saudi Arabia → Bangladesh)** while remaining dynamically extensible to any vertical via a schema-driven **Custom Attribute Engine**.
 
@@ -289,7 +289,7 @@ npm run build     # Build production bundle
 
 <div align="center">
 
-**[AURORA BUSINESS OS](https://aurora-business-os.vercel.app/)** · Built by **Masum Billah** · Licensed under the **[MIT License](./LICENSE)**
+**[Aurora BusinessHub](https://aurora-business-hub.vercel.app/)** · Built by **Masum Billah** · Licensed under the **[MIT License](./LICENSE)**
 
 *Build. Manage. Grow.*
 

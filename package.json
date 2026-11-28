@@ -1,8 +1,8 @@
 {
-  "name": "aurora-business-os",
+  "name": "aurora-business-hub",
   "version": "0.1.0",
   "private": true,
-  "description": "AURORA BUSINESS OS — Universal Business Management & Intelligent ERP Platform",
+  "description": "Aurora BusinessHub — Universal Business Management & Intelligent ERP Platform",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

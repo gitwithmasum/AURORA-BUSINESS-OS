@@ -120,7 +120,7 @@ export function AuroraBrandTitle({
           AURORA
         </span>
         <span className="system-code inline-flex items-center rounded border border-amber-400/25 bg-amber-400/10 px-1.5 py-0.5 text-[8px] font-bold tracking-widest text-[var(--aurora-accent)] leading-none select-none">
-          OS
+          HUB
         </span>
       </div>
       <div
@@ -129,7 +129,7 @@ export function AuroraBrandTitle({
           compact ? "text-[9px]" : "text-[10px]"
         )}
       >
-        BUSINESS SYSTEM
+        BUSINESS HUB
       </div>
     </div>
   );

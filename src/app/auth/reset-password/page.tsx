@@ -67,7 +67,7 @@ export default function ResetPasswordPage() {
           <div>
             <GlassCardTitle className="text-xl">Reset Password</GlassCardTitle>
             <GlassCardDescription>
-              Choose a strong new password for your AURORA BUSINESS OS account.
+              Choose a strong new password for your Aurora BusinessHub account.
             </GlassCardDescription>
           </div>
         </GlassCardHeader>

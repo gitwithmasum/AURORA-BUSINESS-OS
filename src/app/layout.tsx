@@ -17,15 +17,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "AURORA BUSINESS OS",
+  title: "Aurora BusinessHub",
   description:
     "Futuristic Glassmorphism Business Management & Luxury Perfume Import ERP Platform.",
-  applicationName: "AURORA BUSINESS OS",
+  applicationName: "Aurora BusinessHub",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "AURORA BUSINESS OS",
+    title: "Aurora BusinessHub",
   },
   formatDetection: {
     telephone: false,

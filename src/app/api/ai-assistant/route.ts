@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     const apiKey = process.env.GEMINI_API_KEY?.trim();
     if (apiKey) {
       try {
-        const promptText = `You are AURORA BUSINESS OS AI Assistant. Summarize this business question using ONLY the verified facts below. Never invent numbers or execute actions.\nQuestion: ${question}\nRecorded Facts: ${brief.recordedFacts.join(" | ")}\nCalculated Metrics: ${brief.calculatedMetrics.join(" | ")}\nForecasts: ${brief.forecasts.join(" | ")}\nMissing Data: ${brief.missingData.join(" | ")}`;
+        const promptText = `You are Aurora BusinessHub AI Assistant. Summarize this business question using ONLY the verified facts below. Never invent numbers or execute actions.\nQuestion: ${question}\nRecorded Facts: ${brief.recordedFacts.join(" | ")}\nCalculated Metrics: ${brief.calculatedMetrics.join(" | ")}\nForecasts: ${brief.forecasts.join(" | ")}\nMissing Data: ${brief.missingData.join(" | ")}`;
         const geminiRes = await fetch(
           `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
           {
