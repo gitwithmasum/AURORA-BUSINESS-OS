@@ -580,11 +580,11 @@ export function GlassSidebar() {
       {/* Desktop / Laptop Sticky Floating Glass Sidebar */}
       <aside
         className={cn(
-          "hidden shrink-0 transition-all duration-300 ease-out lg:block",
+          "sticky top-4 self-start h-[calc(100dvh-2rem)] z-30 hidden shrink-0 transition-all duration-300 ease-out lg:block",
           sidebarCollapsed ? "w-[88px]" : "w-[272px]"
         )}
       >
-        <div className="aurora-glass sticky top-4 h-[calc(100dvh-2rem)] rounded-[26px]">
+        <div className="aurora-glass h-full rounded-[26px]">
           <SidebarContent collapsed={sidebarCollapsed} />
         </div>
       </aside>
